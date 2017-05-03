@@ -11,6 +11,6 @@ public class APIWorker {
             throws Exception {
         // А тут составить запрос
         return true;
-    }
+}
 }
 
