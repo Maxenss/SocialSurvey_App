@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Social</string>
+    <string name="help">"
+        Администратор имеет полный доступ к анкетам;
+        Контролёр имеет возможность просматривать анкеты без внесения изменений;
+        Интервьюер – имеет право только на ввод информации, без возможности ее редактирования и просмотра."</string>
+    <string name="nameOfQuestionnaire">Введите название опроса :</string>
+    <string name="NameOfCreator">Введите своё имя :</string>
+    <string name="CountOfQuestions">Введите количество вопросов :</string>
+    <string name="ChangeContinue">Продолжить</string>
+    <string name="Anonim">Анонимный опрос :</string>
+</resources>
