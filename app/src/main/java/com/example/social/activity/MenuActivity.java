@@ -1,4 +1,4 @@
-package com.example.social;
+package com.example.social.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class profile_select extends Activity {
+import com.example.social.R;
+import com.example.social.createQuestionnaire;
+
+public class MenuActivity extends Activity {
 
     Button create;
     Button edit;
@@ -19,7 +22,7 @@ public class profile_select extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_select);
+        setContentView(R.layout.activity_menu);
 
         create = (Button)findViewById(R.id.Create_new);
         edit = (Button)findViewById(R.id.Edit_quiz);

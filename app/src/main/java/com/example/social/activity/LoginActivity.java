@@ -1,4 +1,4 @@
-package com.example.social;
+package com.example.social.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.social.R;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void btLoginClick() {
-
+        startActivity(new Intent(this, ChoiceProfileActivity.class));
     }
 
     private void btRegistrationClick() {

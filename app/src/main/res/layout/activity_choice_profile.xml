@@ -7,79 +7,81 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.social.Switch_profile"
+    tools:context="com.example.social.activity.ChoiceProfileActivity"
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Администратор\n(полный доступ)"
             android:id="@+id/admin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:layout_margin="20dp"
-            android:textSize="30dp"
-            android:textStyle="bold"
+            android:background="@drawable/oval_button"
             android:onClick="Admin"
-            android:background="@drawable/oval_button" />
+            android:text="Администратор\n(полный доступ)"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Контролёр\n(просмотр анкет)"
             android:id="@+id/control"
-            android:layout_weight="1"
-            android:layout_margin="20dp"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:onClick="Control"
-            android:background="@drawable/oval_button" />
-
-        <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Интервьюер\n(ввод информации)"
-            android:id="@+id/inter"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:layout_margin="20dp"
-            android:textSize="30dp"
-            android:textStyle="bold"
+            android:background="@drawable/oval_button"
+            android:onClick="Control"
+            android:text="Контролёр\n(просмотр анкет)"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/inter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/oval_button"
             android:onClick="Inter"
-            android:background="@drawable/oval_button" />
+            android:text="Интервьюер\n(ввод информации)"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
-            android:layout_width="64dp"
-            android:layout_height="64dp"
             android:id="@+id/help"
-            android:background="@drawable/help"
-            android:onClick="Help" />
-
-        <Button
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:background="@drawable/help"
+            android:onClick="Help"/>
+
+        <Button
             android:id="@+id/settings"
-            android:background="@drawable/settings"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:onClick="Settings" />
+            android:background="@drawable/settings"
+            android:onClick="Settings"/>
 
         <Button
+            android:id="@+id/exit"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:id="@+id/exit"
             android:background="@drawable/button_cancel"
-            android:onClick="Exit" />
+            android:onClick="Exit"/>
+
     </LinearLayout>
 
 </LinearLayout>

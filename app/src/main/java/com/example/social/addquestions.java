@@ -1,4 +1,4 @@
-package com.example.social.activity;
+package com.example.social;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,10 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
-
-import com.example.social.R;
-import com.example.social.activity_with_created_quiz;
-import com.example.social.classWithQuestionaire;
 
 import java.util.ArrayList;
 

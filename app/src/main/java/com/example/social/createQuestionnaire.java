@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.social.activity.addquestions;
-
 public class createQuestionnaire extends AppCompatActivity {
 
     EditText NameOfQuestionnaire_field;
