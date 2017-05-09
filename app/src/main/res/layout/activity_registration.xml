@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llRegistration"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.social.activity.RegistrationActivity">
@@ -84,7 +85,9 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="5dp"
-                android:text="Создать аккаунт"/>
+                android:background="@drawable/oval_button"
+                android:text="Создать аккаунт"
+                android:textStyle="bold"/>
 
         </LinearLayout>
     </ScrollView>

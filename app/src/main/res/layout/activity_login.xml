@@ -22,9 +22,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:ems="10"
-                android:gravity="center"
+                android:gravity="bottom"
                 android:hint="Введите логин"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName"
+                android:paddingLeft="15dp"/>
 
             <EditText
                 android:id="@+id/etPassword"
@@ -32,9 +33,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:ems="10"
-                android:gravity="center"
+                android:gravity="bottom"
                 android:hint="Введите пароль "
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName"
+                android:paddingLeft="15dp"/>
 
             <Button
                 android:id="@+id/btLogin"
@@ -43,7 +45,9 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="5dp"
-                android:text="Вход"/>
+                android:background="@drawable/oval_button"
+                android:text="Вход"
+                android:textStyle="bold"/>
 
             <Button
                 android:id="@+id/btRegistration"
@@ -52,7 +56,9 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
-                android:text="Регистрация "/>
+                android:background="@drawable/oval_button"
+                android:text="Регистрация "
+                android:textStyle="bold"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

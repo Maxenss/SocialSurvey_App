@@ -2,40 +2,25 @@ package com.example.social.classes;
 
 import android.os.AsyncTask;
 
-import com.google.gson.GsonBuilder;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created by Maxim on 03.05.2017.
+ * Created by Maxim on 09.05.2017.
  */
 
-public class APIWorker {
-    static String json;
+public class LoginAPIWorker {
+    static String requestData;
     static String responseData;
     static int responseCode;
 
-    public static boolean registationMethod(String userLogin, String userPassword,
-                                            String passwordConfirm, String firstName,
-                                            String lastName, String middleName)
+    public static boolean signInMethod(String userLogin, String userPassword)
             throws Exception {
 
-        Map<String, String> hashMapParams = new HashMap<>();
-
-        hashMapParams.put("login", userLogin);
-        hashMapParams.put("password", userPassword);
-        hashMapParams.put("passwordConfirm", passwordConfirm);
-        hashMapParams.put("firstName", firstName);
-        hashMapParams.put("lastName", lastName);
-        hashMapParams.put("middleName", middleName);
-
-        json = new GsonBuilder().create().toJson(hashMapParams, Map.class);
+        requestData = "login=" + userLogin + "&password=" + userPassword;
 
         RegistrationTask pt = new RegistrationTask();
         pt.execute();
@@ -48,25 +33,27 @@ public class APIWorker {
     }
 
     // HTTP Post request
-    private static String makeRequest(String url, String postJsonData) throws Exception {
+    private static String makeRequest(String url, String requestData) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         responseData = "";
 
         // Setting basic post request
         con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
         // Send post request
         con.setDoOutput(true);
+        con.setDoInput(true);
+
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(postJsonData);
+        wr.writeBytes(requestData);
         wr.flush();
         wr.close();
 
         int responceCode = con.getResponseCode();
         System.out.println("nSending 'POST' request to URL : " + url);
-        System.out.println("Post Data : " + postJsonData);
+        System.out.println("Post Data : " + requestData);
         System.out.println("Response Code : " + responceCode);
 
         BufferedReader in = new BufferedReader(
@@ -88,12 +75,11 @@ public class APIWorker {
 
     private static class RegistrationTask extends AsyncTask<Void, Void, Void> {
 
-        String responseString = "";
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                String responseString = makeRequest(Data.URL + "register", json);
+                makeRequest(Data.URL + "token", requestData);
             } catch (Exception e) {
                 System.out.println("Ну пиздец");
                 e.printStackTrace();

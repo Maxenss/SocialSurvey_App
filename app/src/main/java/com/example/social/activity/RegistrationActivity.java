@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.social.R;
@@ -19,6 +20,8 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText etLastName;
     EditText etMiddleName;
     Button btCreateAccount;
+
+    LinearLayout llRegistration;
 
     String userLogin;
     String userPassword;
@@ -40,6 +43,8 @@ public class RegistrationActivity extends AppCompatActivity {
         etMiddleName = (EditText) findViewById(R.id.etMiddleName);
 
         btCreateAccount = (Button) findViewById(R.id.btCreateAccount);
+
+        llRegistration = (LinearLayout) findViewById(R.id.llRegistration);
 
         btCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,12 +101,22 @@ public class RegistrationActivity extends AppCompatActivity {
         // --------------------------------------------------------------//
         //                      Подключаемся к серверу
         // --------------------------------------------------------------//
+
+        llRegistration.setEnabled(false);
+
         try {
-            APIWorker.registationMethod(userLogin, userPassword, passwordConfirm,
-                    firstName, lastName, middleName);
+            if (APIWorker.registationMethod(userLogin, userPassword, passwordConfirm,
+                    firstName, lastName, middleName))
+                Toast.makeText(this, "Регистрация прошла успешно", Toast.LENGTH_SHORT).show();
+            else {
+                Toast.makeText(this, "Что-то пошло не так", Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this, "Что-то пошло не так", Toast.LENGTH_SHORT).show();
         }
+
+        llRegistration.setEnabled(true);
 
     }
 }
