@@ -1,5 +1,6 @@
 package com.example.social.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setTitle("Вход");
 
         etLogin = (EditText) findViewById(R.id.etLogin);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -84,8 +86,6 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
         }
-
-        // startActivity(new Intent(this, ChoiceProfileActivity.class));
     }
 
     private void btRegistrationClick() {
@@ -240,6 +240,35 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void res) {
             llSignIn.setEnabled(true);
+
+            // Получаем токен пользователя
+            JSONObject dataJsonObj = null;
+
+            try {
+                dataJsonObj = new JSONObject(responseData).getJSONObject("response");
+                Data.userId = dataJsonObj.getInt("userId");
+                Data.login = dataJsonObj.getString("login");
+                Data.firstName = dataJsonObj.getString("firstName");
+                Data.lastName = dataJsonObj.getString("lastName");
+                Data.middleName = dataJsonObj.getString("middleName");
+                Data.role = dataJsonObj.getString("role");
+
+                System.out.println(Data.userId);
+                System.out.println(Data.login);
+                System.out.println(Data.firstName);
+                System.out.println(Data.lastName);
+                System.out.println(Data.middleName);
+                System.out.println(Data.role);
+
+                Data.setAccessLevel();
+
+                System.out.println(Data.accessLevel);
+
+                Context context = getApplicationContext();
+                startActivity(new Intent(context, ChoiceProfileActivity.class));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

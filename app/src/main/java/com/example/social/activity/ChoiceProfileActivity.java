@@ -4,43 +4,73 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.social.R;
+import com.example.social.classes.Data;
 import com.example.social.help;
+
+import static com.example.social.classes.Data.accessLevelMenu;
 
 
 public class ChoiceProfileActivity extends Activity {
 
-    static int flag_access = 0;   // Флаг указывающий , на права доступа
-    static Integer password = 123456789;
+    Button btAdmin;
+    Button btControl;
+    Button btInter;
+    Button btHelp;
+    Button btSettings;
+    Button btExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choice_profile);
 
+        setTitle("Выберите роль");
 
+        btAdmin = (Button) findViewById(R.id.btAdmin);
+        btControl = (Button) findViewById(R.id.btControl);
+        btInter = (Button) findViewById(R.id.btInter);
+        btHelp = (Button) findViewById(R.id.btHelp);
+        btSettings = (Button) findViewById(R.id.btSettings);
+        btExit = (Button) findViewById(R.id.btExit);
+
+        switch (Data.accessLevel){
+            case Data.InterviewerRole:
+                btInter.setEnabled(true);
+                btControl.setEnabled(false);
+                btAdmin.setEnabled(false);
+                break;
+            case Data.ControllerRole:
+                btInter.setEnabled(true);
+                btControl.setEnabled(true);
+                btAdmin.setEnabled(false);
+                break;
+            case Data.AdminRole:
+                btInter.setEnabled(true);
+                btControl.setEnabled(true);
+                btAdmin.setEnabled(true);
+                break;
+        }
     }
 
     public void Admin(View v) {
-        flag_access = 1;
         Toast.makeText(ChoiceProfileActivity.this, "Администратор", Toast.LENGTH_SHORT).show();
-
+        accessLevelMenu = Data.AdminRole;
         creatActivitySelect();
     }
 
     public void Control(View v) {
-        flag_access = 2;
         Toast.makeText(ChoiceProfileActivity.this, "Контролёр", Toast.LENGTH_SHORT).show();
-
+        accessLevelMenu = Data.ControllerRole;
         creatActivitySelect();
     }
 
     public void Inter(View v) {
-        flag_access = 3;
         Toast.makeText(ChoiceProfileActivity.this, "Интерьвюер", Toast.LENGTH_SHORT).show();
-
+        accessLevelMenu = Data.InterviewerRole;
         creatActivitySelect();
     }
 
@@ -61,7 +91,6 @@ public class ChoiceProfileActivity extends Activity {
 
     private void creatActivitySelect() {
         Intent intent = new Intent(this, MenuActivity.class);
-        intent.putExtra("flag", flag_access);
 
         startActivity(intent);
     }

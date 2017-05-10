@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/Create_new"
+        android:id="@+id/btCreateNewSurvey"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
@@ -17,7 +17,7 @@
         android:textStyle="bold"/>
 
     <Button
-        android:id="@+id/View_quiz"
+        android:id="@+id/btViewSurvey"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
@@ -29,30 +29,30 @@
         android:textStyle="bold"/>
 
     <Button
-        android:id="@+id/Edit_quiz"
+        android:id="@+id/btUsersInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
         android:layout_weight="1"
         android:background="@drawable/oval_button"
-        android:text="Редактирование опросов"
+        android:text="Просмотр пользователей"
         android:textSize="20dp"
         android:textStyle="bold"/>
 
     <Button
-        android:id="@+id/inter_profile"
+        android:id="@+id/btStatistics"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:layout_weight="1"
         android:background="@drawable/oval_button"
-        android:text="Ввод данных о интервьюере"
+        android:text="Статистика"
         android:textSize="20dp"
         android:textStyle="bold"/>
 
     <Button
-        android:id="@+id/quiz"
+        android:id="@+id/btStartSurvey"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"

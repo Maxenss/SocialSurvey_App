@@ -18,7 +18,7 @@
         android:visibility="visible">
 
         <Button
-            android:id="@+id/admin"
+            android:id="@+id/btAdmin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
@@ -30,7 +30,7 @@
             android:textStyle="bold"/>
 
         <Button
-            android:id="@+id/control"
+            android:id="@+id/btControl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
@@ -42,7 +42,7 @@
             android:textStyle="bold"/>
 
         <Button
-            android:id="@+id/inter"
+            android:id="@+id/btInter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
@@ -60,14 +60,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/help"
+            android:id="@+id/btHelp"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@drawable/help"
             android:onClick="Help"/>
 
         <Button
-            android:id="@+id/settings"
+            android:id="@+id/btSettings"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginLeft="20dp"
@@ -76,7 +76,7 @@
             android:onClick="Settings"/>
 
         <Button
-            android:id="@+id/exit"
+            android:id="@+id/btExit"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@drawable/button_cancel"

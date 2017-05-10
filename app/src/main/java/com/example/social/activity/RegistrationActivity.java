@@ -50,6 +50,7 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        setTitle("Регистрация");
 
         etUserLogin = (EditText) findViewById(R.id.etUserLogin);
         etUserPassword = (EditText) findViewById(R.id.etUserPassword);

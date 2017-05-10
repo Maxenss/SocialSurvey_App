@@ -7,81 +7,116 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.social.R;
+import com.example.social.classes.Data;
 import com.example.social.createQuestionnaire;
 
-public class MenuActivity extends Activity {
+public class MenuActivity extends Activity implements View.OnClickListener {
 
-    Button create;
-    Button edit;
-    Button view;
-    Button quiz;
-    Button inter_profile;
+    Button btCreateNewSurvey;
+    Button btViewSurvey;
+    Button btUsersInfo;
+    Button btStatistics;
+    Button btStartSurvey;
 
-    int flag_access = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        create = (Button)findViewById(R.id.Create_new);
-        edit = (Button)findViewById(R.id.Edit_quiz);
-        view = (Button)findViewById(R.id.View_quiz);
-        quiz = (Button)findViewById(R.id.quiz);
-        inter_profile = (Button)findViewById(R.id.inter_profile);
+        btCreateNewSurvey = (Button) findViewById(R.id.btCreateNewSurvey);
+        btViewSurvey = (Button) findViewById(R.id.btViewSurvey);
+        btUsersInfo = (Button) findViewById(R.id.btUsersInfo);
+        btStatistics = (Button) findViewById(R.id.btStatistics);
+        btStartSurvey = (Button) findViewById(R.id.btStartSurvey);
 
-        try {
-            Intent intent = getIntent();
-            flag_access = intent.getIntExtra("flag", 0);
-        }
-        catch (Exception e){}
-
-        System.out.println(flag_access);
+        btCreateNewSurvey.setOnClickListener(this);
+        btViewSurvey.setOnClickListener(this);
+        btUsersInfo.setOnClickListener(this);
+        btStatistics.setOnClickListener(this);
+        btStartSurvey.setOnClickListener(this);
 
         setVisible();
     }
 
-    protected void setVisible(){
-        try {
-            switch (flag_access) {
-                case 1: {
-                    create.setVisibility(View.VISIBLE);
-                    edit.setVisibility(View.VISIBLE);
-                    view.setVisibility(View.VISIBLE);
-                    quiz.setVisibility(View.GONE);
-                    inter_profile.setVisibility(View.GONE);
-                    break;
-                }
-                case 2:{
-                    create.setVisibility(View.GONE);
-                    view.setVisibility(View.VISIBLE);
-                    edit.setVisibility(View.GONE);
-                    quiz.setVisibility(View.GONE);
-                    inter_profile.setVisibility(View.GONE);
-                    break;
-                }
-                case 3:{
-                    create.setVisibility(View.GONE);
-                    view.setVisibility(View.GONE);
-                    edit.setVisibility(View.GONE);
-                    quiz.setVisibility(View.VISIBLE);
-                    inter_profile.setVisibility(View.VISIBLE);
-                    break;
-                }
+    protected void setVisible() {
+        switch (Data.accessLevelMenu) {
+            case Data.InterviewerRole: {
+                setTitle("Интервьюер");
+                btCreateNewSurvey.setVisibility(View.GONE);
+                btViewSurvey.setVisibility(View.GONE);
+                btUsersInfo.setVisibility(View.GONE);
+                btStatistics.setVisibility(View.GONE);
+                btStartSurvey.setVisibility(View.VISIBLE);
+                break;
+            }
+            case Data.ControllerRole: {
+                setTitle("Контроллер");
+                btCreateNewSurvey.setVisibility(View.GONE);
+                btViewSurvey.setVisibility(View.GONE);
+                btUsersInfo.setVisibility(View.GONE);
+                btStatistics.setVisibility(View.VISIBLE);
+                btStartSurvey.setVisibility(View.GONE);
+                break;
+            }
+            case Data.AdminRole: {
+                setTitle("Администратор");
+                btCreateNewSurvey.setVisibility(View.VISIBLE);
+                btViewSurvey.setVisibility(View.VISIBLE);
+                btUsersInfo.setVisibility(View.VISIBLE);
+                btStatistics.setVisibility(View.GONE);
+                btStartSurvey.setVisibility(View.GONE);
+                break;
             }
         }
 
-        catch (Exception e ){}
-    }
 
-    protected void NewQuiz (View v){
-        Intent intent = new Intent(this, createQuestionnaire.class);
-        startActivity(intent);
-    } // Создание нового опроса
+    }
 
     @Override
     protected void onStop() {
         super.onStop();
         finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btCreateNewSurvey:
+                btCreateNewSurveyClick();
+                break;
+            case R.id.btStartSurvey:
+                btStartSurveyClick();
+                break;
+            case R.id.btViewSurvey:
+                btViewSurveyClick();
+                break;
+            case R.id.btUsersInfo:
+                btUsersInfoClick();
+                break;
+            case R.id.btStatistics:
+                btStatisticsClick();
+                break;
+        }
+    }
+
+    private void btCreateNewSurveyClick() {
+        startActivity(new Intent(this, createQuestionnaire.class));
+    }
+
+    private void btViewSurveyClick() {
+
+    }
+
+    private void btUsersInfoClick() {
+
+    }
+
+    private void btStatisticsClick() {
+
+    }
+
+    private void btStartSurveyClick() {
+        startActivity(new Intent(this, InterwierSurveyListActivity.class));
     }
 }
