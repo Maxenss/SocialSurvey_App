@@ -1,25 +1,41 @@
 package com.example.social.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.social.R;
-import com.example.social.classes.LoginAPIWorker;
+import com.example.social.classes.Data;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
+    private EditText etLogin;
+    private EditText etPassword;
+    private Button btLogin;
+    private Button btRegistration;
+    private LinearLayout llSignIn;
 
-    EditText etLogin;
-    EditText etPassword;
-    Button btLogin;
-    Button btRegistration;
+    private String userLogin;
+    private String userPassword;
 
-    String userLogin;
-    String userPassword;
+    private String requestData;
+    private String responseData;
+    private int responseCode;
+
+    private boolean signInFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         btLogin = (Button) findViewById(R.id.btLogin);
         btRegistration = (Button) findViewById(R.id.btRegistration);
+        llSignIn = (LinearLayout) findViewById(R.id.llSignIn);
 
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void btLoginClick() {
         if (!etLogin.getText().toString().isEmpty())
@@ -63,15 +79,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         try {
-            if (LoginAPIWorker.signInMethod(userLogin, userPassword)) {
-                Toast.makeText(this, "Регистрация прошла успешно", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Toast.makeText(this, "Что-то пошло не так", Toast.LENGTH_SHORT).show();
-            }
+            signInMethod();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Что-то пошло не так", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
         }
 
         // startActivity(new Intent(this, ChoiceProfileActivity.class));
@@ -80,4 +91,156 @@ public class LoginActivity extends AppCompatActivity {
     private void btRegistrationClick() {
         startActivity(new Intent(this, RegistrationActivity.class));
     }
+
+    // --------------------------------------------------------------//
+    //                      Методы для залогинивания
+    // --------------------------------------------------------------//
+
+    private void signInMethod() throws Exception {
+        llSignIn.setEnabled(false);
+        requestData = "login=" + userLogin + "&password=" + userPassword;
+
+        SignInTask pt = new SignInTask();
+        pt.execute();
+    }
+
+    // HTTP Post request
+    private String makeRequestPost(String url, String requestData) throws Exception {
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        responseData = "";
+
+        // Setting basic post request
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+        // Send post request
+        con.setDoOutput(true);
+        con.setDoInput(true);
+
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.writeBytes(requestData);
+        wr.flush();
+        wr.close();
+
+        responseCode = con.getResponseCode();
+        System.out.println("nSending 'POST' request to URL : " + url);
+        System.out.println("Post Data : " + requestData);
+        System.out.println("Response Code : " + responseCode);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String output;
+        StringBuffer response = new StringBuffer();
+
+        while ((output = in.readLine()) != null) {
+            response.append(output);
+        }
+        in.close();
+
+        responseData = response.toString();
+
+        System.out.println(responseData);
+        return responseData;
+    }
+
+    private class SignInTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                makeRequestPost(Data.URL + "token", requestData);
+                signInFlag = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                signInFlag = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void res) {
+            if (signInFlag) {
+                Toast.makeText(LoginActivity.this, "Вы залогинены", Toast.LENGTH_SHORT).show();
+
+                // Получаем токен пользователя
+                JSONObject dataJsonObj = null;
+
+                try {
+                    dataJsonObj = new JSONObject(responseData);
+                    Data.token = dataJsonObj.getString("access_token");
+                    System.out.println(Data.token);
+                    getInfoMethod();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else
+                Toast.makeText(LoginActivity.this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
+
+            signInFlag = false;
+            llSignIn.setEnabled(true);
+        }
+    }
+
+    // --------------------------------------------------------------//
+    //               Методы для получения инфы о пользователе
+    // --------------------------------------------------------------//
+
+    private void getInfoMethod() throws Exception {
+        llSignIn.setEnabled(false);
+
+        GetInfoTask task = new GetInfoTask();
+        task.execute();
+    }
+
+    // HTTP Post request
+    private String makeRequestGet(String url) throws Exception {
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        responseData = "";
+
+        // Setting basic post request
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Authorization", "Bearer " + Data.token);
+        con.setRequestProperty("Content-Type", "application/json");
+
+        responseCode = con.getResponseCode();
+        System.out.println("nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + responseCode);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String output;
+        StringBuffer response = new StringBuffer();
+
+        while ((output = in.readLine()) != null) {
+            response.append(output);
+        }
+        in.close();
+
+        responseData = response.toString();
+
+        System.out.println(responseData);
+        return responseData;
+    }
+
+    private class GetInfoTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                makeRequestGet(Data.URL + "api/account");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void res) {
+            llSignIn.setEnabled(true);
+        }
+    }
+
 }
