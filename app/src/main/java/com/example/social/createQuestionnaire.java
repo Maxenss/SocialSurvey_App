@@ -41,10 +41,10 @@ public class createQuestionnaire extends AppCompatActivity {
             }
 
             try {
-                classWithQuestionaire.interwie = new questionnaire(creatorName_field.getText().toString(),
-                        NameOfQuestionnaire_field.getText().toString(),
-                        Integer.parseInt(countOfQuestions_field.getText().toString()));
-
+              //  classWithQuestionaire.interwie = new questionnaire(creatorName_field.getText().toString(),
+              //          NameOfQuestionnaire_field.getText().toString(),
+              //          Integer.parseInt(countOfQuestions_field.getText().toString()));
+//
                 Intent intent = new Intent(this, addquestions.class);
                 intent.putExtra("Количество вопросов", Integer.parseInt(countOfQuestions_field.getText().toString()));
                 startActivity(intent);

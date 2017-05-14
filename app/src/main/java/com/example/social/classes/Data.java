@@ -23,6 +23,8 @@ public class Data {
 
     public static int surveyId;
 
+    public static Survey targetSurvey;
+
 
     public static void setAccessLevel() {
         switch (role) {

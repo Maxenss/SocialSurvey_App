@@ -1,9 +1,11 @@
-package com.example.social;
+package com.example.social.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-public class help extends Activity {
+import com.example.social.R;
+
+public class HelpActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

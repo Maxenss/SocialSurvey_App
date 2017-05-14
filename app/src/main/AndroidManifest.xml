@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ChoiceProfileActivity"/>
-        <activity android:name=".help"/>
+        <activity android:name=".activity.HelpActivity"/>
         <activity android:name=".activity.MenuActivity"/>
         <activity android:name=".createQuestionnaire"/>
         <activity android:name=".addquestions"/>

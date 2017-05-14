@@ -130,8 +130,8 @@ public class addquestions extends Activity {
             // Проверка количества вопросов.
             // Добавляем вопрос и ответы
             addAnswerToCollection();
-            classWithQuestionaire.interwie.NewQuestion(question_text_field.getText().toString()
-                    , CollectionWithAnswers.size(), isMultiple.isChecked(), CollectionWithAnswers);
+           // classWithQuestionaire.interwie.NewQuestion(question_text_field.getText().toString()
+           //         , CollectionWithAnswers.size(), isMultiple.isChecked(), CollectionWithAnswers);
 
             CollectionWithAnswers = new ArrayList<String>();
 

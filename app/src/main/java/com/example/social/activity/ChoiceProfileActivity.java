@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.example.social.R;
 import com.example.social.classes.Data;
-import com.example.social.help;
 
 import static com.example.social.classes.Data.accessLevelMenu;
 
@@ -77,7 +76,7 @@ public class ChoiceProfileActivity extends Activity {
     public void Help(View v) {
         Toast.makeText(ChoiceProfileActivity.this, "Help", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, help.class);
+        Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
     }
 
