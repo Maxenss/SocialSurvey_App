@@ -33,6 +33,8 @@
         </activity>
         <activity android:name=".activity.InterwierSurveyListActivity">
         </activity>
+        <activity android:name=".activity.SurveyFullInfoActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -21,6 +21,8 @@ public class Data {
     public static String middleName;
     public static String role;
 
+    public static int surveyId;
+
 
     public static void setAccessLevel() {
         switch (role) {

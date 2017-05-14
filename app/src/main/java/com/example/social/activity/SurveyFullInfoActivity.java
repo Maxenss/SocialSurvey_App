@@ -1,53 +1,35 @@
 package com.example.social.activity;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.example.social.R;
 import com.example.social.classes.Data;
-import com.example.social.classes.SurveyShort;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-public class InterwierSurveyListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class SurveyFullInfoActivity extends AppCompatActivity {
+
     private String responseData;
     private int responseCode;
 
     private boolean isCorrect;
 
-    private ArrayList<SurveyShort> mSurveyShortArrayList;
-
-    ListView lvSusrvesyShort;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_interwier_survey_list);
-
-        lvSusrvesyShort = (ListView) findViewById(R.id.lvSusrvesyShort);
-
-        mSurveyShortArrayList = new ArrayList<>();
+        setContentView(R.layout.activity_survey_full_info);
 
         try {
-            getSurveysListMethod();
-        } catch (Exception e) {
-            e.printStackTrace();
+            getSurveyFullMethod();
+        }
+        catch (Exception e){
+
         }
     }
 
@@ -55,8 +37,8 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
     //               Методы для получения инфы о опросах
     // --------------------------------------------------------------//
 
-    private void getSurveysListMethod() throws Exception {
-        GetSurveysListTask getSurveysListTask = new GetSurveysListTask();
+    private void getSurveyFullMethod() throws Exception {
+        GetSurveyFullTask getSurveysListTask = new GetSurveyFullTask();
         getSurveysListTask.execute();
     }
 
@@ -91,12 +73,12 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
         return responseData;
     }
 
-    private class GetSurveysListTask extends AsyncTask<Void, Void, Void> {
+    private class GetSurveyFullTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                makeRequestGet(Data.URL + "api/surveys");
+                makeRequestGet(Data.URL + "api/surveys/" + Data.surveyId);
                 isCorrect = true;
             } catch (Exception e) {
                 isCorrect = false;
@@ -109,16 +91,15 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
         protected void onPostExecute(Void res) {
             if (isCorrect) {
                 parseJSON();
-                createListView();
             } else {
-                Toast.makeText(InterwierSurveyListActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SurveyFullInfoActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     // Заполняет коллекцию mSurveyShortArrayList, данными из JSON-документа
     private void parseJSON() {
-        JSONObject dataJsonObj = null;
+       /* JSONObject dataJsonObj = null;
 
         try {
             dataJsonObj = new JSONObject(responseData);
@@ -140,51 +121,13 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
             e.printStackTrace();
         }
 
-        for (SurveyShort ss :
+        for (SurveyShort ss:
                 mSurveyShortArrayList) {
             System.out.println(ss.getCooment());
             System.out.println(ss.getName());
             System.out.println(ss.getSurveyId());
             System.out.println(ss.getUserId());
             System.out.println(ss.isDeleted());
-        }
+        }*/
     }
-
-    private void createListView() {
-        ArrayList<HashMap<String, String>> mSurveysShortList;
-        final String TITLE = "catname"; // Верхний текст
-        final String DESCRIPTION = "description"; // ниже главного
-
-        // создаем массив списков
-        mSurveysShortList = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> hm;
-
-        for (SurveyShort ss :
-                mSurveyShortArrayList) {
-            hm = new HashMap<>();
-            hm.put(TITLE, ss.getName()); // Название
-            hm.put(DESCRIPTION, ss.getCooment()); // Описание
-
-            mSurveysShortList.add(hm);
-        }
-
-        SimpleAdapter adapter = new SimpleAdapter(this, mSurveysShortList,
-                android.R.layout.simple_list_item_2, new String[]{TITLE, DESCRIPTION},
-                new int[]{android.R.id.text1,
-                        android.R.id.text2});
-
-        lvSusrvesyShort.setAdapter(adapter);
-
-        lvSusrvesyShort.setOnItemClickListener(this);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println(position);
-
-        Data.surveyId = mSurveyShortArrayList.get(position).getSurveyId();
-
-        startActivity(new Intent(this, SurveyFullInfoActivity.class));
-    }
-
 }
