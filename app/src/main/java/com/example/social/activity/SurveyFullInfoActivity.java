@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.social.R;
 import com.example.social.classes.Data;
+import com.example.social.classes.Survey;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -27,8 +28,7 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
 
         try {
             getSurveyFullMethod();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -90,44 +90,10 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void res) {
             if (isCorrect) {
-                parseJSON();
+                Data.targetSurvey = Survey.getSurveyFromJSON(responseData);
             } else {
                 Toast.makeText(SurveyFullInfoActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    // Заполняет коллекцию mSurveyShortArrayList, данными из JSON-документа
-    private void parseJSON() {
-       /* JSONObject dataJsonObj = null;
-
-        try {
-            dataJsonObj = new JSONObject(responseData);
-            JSONArray surveysArray = dataJsonObj.getJSONArray("response");
-
-            for (int i = 0; i < surveysArray.length(); i++) {
-                JSONObject survey = surveysArray.getJSONObject(i);
-
-                mSurveyShortArrayList.add(new SurveyShort(
-                        survey.getInt("surveyId"),
-                        survey.getString("name"),
-                        survey.getString("comment"),
-                        survey.getBoolean("isDeleted"),
-                        survey.getInt("userId")
-                ));
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        for (SurveyShort ss:
-                mSurveyShortArrayList) {
-            System.out.println(ss.getCooment());
-            System.out.println(ss.getName());
-            System.out.println(ss.getSurveyId());
-            System.out.println(ss.getUserId());
-            System.out.println(ss.isDeleted());
-        }*/
     }
 }

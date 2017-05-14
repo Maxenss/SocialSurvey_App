@@ -30,6 +30,10 @@ public class Question {
         mArrayListOptions = arrayListOptions;
     }
 
+    public Question() {
+        mArrayListOptions = new ArrayList<>();
+    }
+
     public int getQuestionId() {
         return mQuestionId;
     }

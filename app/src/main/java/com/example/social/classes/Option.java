@@ -22,6 +22,9 @@ public class Option {
         mIsDeleted = isDeleted;
     }
 
+    public Option(){
+    }
+
     public int getOptionId() {
         return mOptionId;
     }
