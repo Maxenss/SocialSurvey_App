@@ -1,8 +1,14 @@
 package com.example.social.activity;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.social.R;
@@ -13,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class SurveyFullInfoActivity extends AppCompatActivity {
 
@@ -21,25 +28,123 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
 
     private boolean isCorrect;
 
+    ArrayList<LinearLayout> LinearLayoutWithQuestionsArrayList;
+
+    LinearLayout llQuestions;
+    TextView tvNameOfSurvey;
+    TextView tvCountOfQuetions;
+    Button btStartSurvey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_full_info);
 
+        LinearLayoutWithQuestionsArrayList = new ArrayList<>();
+
+        llQuestions = (LinearLayout) findViewById(R.id.llQuestions);
+        tvNameOfSurvey = (TextView) findViewById(R.id.tvNameOfSurvey);
+        tvCountOfQuetions = (TextView) findViewById(R.id.tvCountOfQuetions);
+        btStartSurvey = (Button) findViewById(R.id.btStartSurvey);
+
+        btStartSurvey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(SurveyFullInfoActivity.this, "Дирижабль? Ага!!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         try {
             getSurveyFullMethod();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
+    private void showQuestions() {
+        try {
+            tvNameOfSurvey.setText(Data.targetSurvey.getName());
+            tvCountOfQuetions.setText("Количество вопросов : " +
+                    Data.targetSurvey.getArrayListQuestions().size());
+
+            for (int i = 0; i < Data.targetSurvey.getArrayListQuestions().size(); i++)
+                createNewLinearLayoutWithQuestion(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createNewLinearLayoutWithQuestion(int index) {
+        // Работа с LinearLayout
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setPadding(20, 20, 20, 20);
+        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        linearLayoutParams.setMargins(0, 20, 0, 0);
+        linearLayout.setBackgroundResource(R.drawable.oval_azure);
+        // -----------------------------------------------------------------------------------
+
+        // Работа с textViewName
+        TextView textViewName = new TextView(this);
+        LinearLayout.LayoutParams TextViewParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        TextViewParams.topMargin = 5;
+        textViewName.setText((index + 1) + ". " +
+                Data.targetSurvey.getArrayListQuestions().get(index).getText());
+        textViewName.setTextColor(Color.parseColor("#000000"));
+        textViewName.setGravity(View.TEXT_ALIGNMENT_GRAVITY);
+        textViewName.setTextSize(18);
+        linearLayout.addView(textViewName, TextViewParams);
+        // -----------------------------------------------------------------------------------
+
+        // Работа с switchMultiple
+        Switch switchMultiple = new Switch(this);
+        LinearLayout.LayoutParams SwitchParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        SwitchParams.setMargins(10, 10, 10, 10);
+        switchMultiple.setText("Множественный выбор");
+        switchMultiple.setTextColor(Color.parseColor("#000000"));
+        switchMultiple.setPadding(30, 0, 0, 0);
+        switchMultiple.setTextSize(17);
+        switchMultiple.setEnabled(false);
+        if (Data.targetSurvey.getArrayListQuestions().get(index).getQuestionType().equals("Select"))
+            switchMultiple.setChecked(false);
+        else
+            switchMultiple.setChecked(true);
+        linearLayout.addView(switchMultiple, SwitchParams);
+        // -----------------------------------------------------------------------------------
+
+        // Работа с ответами
+        for (int i = 0; i < Data.targetSurvey.getArrayListQuestions().get(index).getArrayListOptions().size(); i++) {
+
+            TextView textViewOption = new TextView(this);
+            LinearLayout.LayoutParams TextViewOptionParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            TextViewOptionParams.setMargins(10, 10, 0, 0);
+            textViewOption.setText((i + 1) + ". " + Data.targetSurvey.getArrayListQuestions().get(index)
+                    .getArrayListOptions().get(i).getText());
+            textViewOption.setTextColor(Color.parseColor("#000000"));
+            textViewOption.setBackgroundColor(Color.parseColor("#507CFC00"));
+            textViewOption.setTextSize(15);
+            linearLayout.addView(textViewOption, TextViewOptionParams);
+        }
+        // -----------------------------------------------------------------------------------
+
+        llQuestions.addView(linearLayout, linearLayoutParams);
+    }
+
     // --------------------------------------------------------------//
-    //               Методы для получения инфы о опросах
+    //               Методы для получения инфы о опросе
     // --------------------------------------------------------------//
 
     private void getSurveyFullMethod() throws Exception {
-        GetSurveyFullTask getSurveysListTask = new GetSurveyFullTask();
-        getSurveysListTask.execute();
+        GetSurveyFullTask getSurveyFullTask = new GetSurveyFullTask();
+        getSurveyFullTask.execute();
     }
 
     // HTTP Post request
@@ -91,6 +196,7 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
         protected void onPostExecute(Void res) {
             if (isCorrect) {
                 Data.targetSurvey = Survey.getSurveyFromJSON(responseData);
+                showQuestions();
             } else {
                 Toast.makeText(SurveyFullInfoActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
             }

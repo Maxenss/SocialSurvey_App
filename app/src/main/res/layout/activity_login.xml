@@ -26,7 +26,8 @@
                 android:gravity="bottom"
                 android:hint="Введите логин"
                 android:inputType="textPersonName"
-                android:paddingLeft="15dp"/>
+                android:paddingLeft="15dp"
+                android:text="Admin"/>
 
             <EditText
                 android:id="@+id/etPassword"
@@ -37,7 +38,8 @@
                 android:gravity="bottom"
                 android:hint="Введите пароль "
                 android:inputType="textPersonName"
-                android:paddingLeft="15dp"/>
+                android:paddingLeft="15dp"
+                android:text="qwerty"/>
 
             <Button
                 android:id="@+id/btLogin"
