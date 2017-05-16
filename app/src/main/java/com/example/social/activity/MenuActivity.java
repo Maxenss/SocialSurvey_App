@@ -8,7 +8,6 @@ import android.widget.Button;
 
 import com.example.social.R;
 import com.example.social.classes.Data;
-import com.example.social.createQuestionnaire;
 
 public class MenuActivity extends Activity implements View.OnClickListener {
 
@@ -101,7 +100,7 @@ public class MenuActivity extends Activity implements View.OnClickListener {
     }
 
     private void btCreateNewSurveyClick() {
-        startActivity(new Intent(this, createQuestionnaire.class));
+        startActivity(new Intent(this,  CreateNewSurvey.class));
     }
 
     private void btViewSurveyClick() {

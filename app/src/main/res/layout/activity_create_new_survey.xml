@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,7 +89,6 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/oval_button"
-                android:onClick="AddQuestions"
                 android:text="@string/ChangeContinue"
                 android:textSize="20dp"
                 android:textStyle="bold"/>
@@ -102,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -574,7 +573,6 @@
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/oval_button"
-                        android:onClick="next_question_method"
                         android:text="Следующий вопрос"
                         android:textColor="#000000"/>
 
@@ -586,7 +584,6 @@
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/oval_button"
-                        android:onClick="next_question_method"
                         android:text="Предыдущий вопрос"
                         android:textColor="#000000"/>
 

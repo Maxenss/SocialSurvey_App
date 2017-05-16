@@ -46,6 +46,8 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
     EditText evNewAnswer15;
     EditText evNewAnswer16;
 
+    EditText etAnswersArray[] = new EditText[16];
+
     TextView tvQuestionNumber;
 
     Button btContinueCreateSurvey;
@@ -65,6 +67,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         initializeView();
 
         tvQuestionNumber.setText(1 + ". Вопрос : ");
+        setTitle("Создание нового опроса");
     }
 
     private void initializeView() {
@@ -100,9 +103,31 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         evNewAnswer15 = (EditText) findViewById(R.id.evNewAnswer15);
         evNewAnswer16 = (EditText) findViewById(R.id.evNewAnswer16);
 
+        etAnswersArray[0] = evNewAnswer1;
+        etAnswersArray[1] = evNewAnswer2;
+        etAnswersArray[2] = evNewAnswer3;
+        etAnswersArray[3] = evNewAnswer4;
+        etAnswersArray[4] = evNewAnswer5;
+        etAnswersArray[5] = evNewAnswer6;
+        etAnswersArray[6] = evNewAnswer7;
+        etAnswersArray[7] = evNewAnswer8;
+        etAnswersArray[8] = evNewAnswer9;
+        etAnswersArray[9] = evNewAnswer10;
+        etAnswersArray[10] = evNewAnswer11;
+        etAnswersArray[11] = evNewAnswer12;
+        etAnswersArray[12] = evNewAnswer13;
+        etAnswersArray[13] = evNewAnswer14;
+        etAnswersArray[14] = evNewAnswer15;
+        etAnswersArray[15] = evNewAnswer16;
+
+
         btContinueCreateSurvey = (Button) findViewById(R.id.btContinueCreateSurvey);
         btNextQuestion = (Button) findViewById(R.id.btNextQuestion);
         btPreviosQuestion = (Button) findViewById(R.id.btPreviosQuestion);
+
+        btContinueCreateSurvey.setOnClickListener(this);
+        btNextQuestion.setOnClickListener(this);
+        btPreviosQuestion.setOnClickListener(this);
     }
 
     private void clearAllEditText() {
@@ -131,20 +156,29 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btContinueCreateSurvey: {
-                btContinueCreateSurveyClick();
-                break;
+        try {
+            switch (v.getId()) {
+                case R.id.btContinueCreateSurvey: {
+                    btContinueCreateSurveyClick();
+                    break;
+                }
+                case R.id.btNextQuestion: {
+                    btNextQuestionClick();
+                    break;
+                }
+                case R.id.btPreviosQuestion: {
+                    btPreviosQuestionClick();
+                    break;
+                }
             }
-            case R.id.btNextQuestion:{
-                btNextQuestionClick();
-                break;
-            }
-            case R.id.btPreviosQuestion:{
-                btPreviosQuestionClick();
-                break;
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        btPreviosQuestionClick();
     }
 
     private void btContinueCreateSurveyClick() {
@@ -206,7 +240,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
         Question question = new Question();
         question.setText(etQuestionText.getText().toString());
-        question.setQuestionType(swMultiple.isChecked() ? "Select" : "MultiSelect");
+        question.setQuestionType(swMultiple.isChecked() ? "MultiSelect" : "Select");
         question.getArrayListOptions().add(new Option(evNewAnswer1.getText().toString()));
         question.getArrayListOptions().add(new Option(evNewAnswer2.getText().toString()));
 
@@ -256,27 +290,52 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
         ++questionIndexator;
 
-        tvQuestionNumber.setText(questionIndexator + 2 + ". Вопрос : ");
-
         if (questionIndexator < countOfQuestions) {
+            tvQuestionNumber.setText(questionIndexator + 1 + ". Вопрос : ");
+
             clearAllEditText();
         }
         // Если вопросы закончились
         else {
-
+            // Пока что костыль
+            --questionIndexator;
+            Toast.makeText(this, "Все вопросы созданы", Toast.LENGTH_SHORT).show();
+            // Отправляем на сервер
         }
 
     }
 
-    private void btPreviosQuestionClick(){
+    private void btPreviosQuestionClick() {
         --questionIndexator;
-        if (questionIndexator < 0){
+
+        Question question;
+
+        if (questionIndexator < 0) {
             svMainInfoNewSurvey.setVisibility(View.VISIBLE);
             svNewSurveyQuetions.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             tvQuestionNumber.setText(questionIndexator + 1 + ". Вопрос : ");
 
+            if (newSurvey.getArrayListQuestions().get(questionIndexator) != null) {
+                etQuestionText.setText(newSurvey.getArrayListQuestions().get(questionIndexator).getText());
+
+                swMultiple.setChecked(newSurvey.getArrayListQuestions().
+                        get(questionIndexator).getQuestionType().equals("MultiSelect"));
+
+                for (int i = 0; i < newSurvey.getArrayListQuestions().get(questionIndexator).
+                        getArrayListOptions().size(); i++) {
+
+                    if (newSurvey.getArrayListQuestions().get(questionIndexator).
+                            getArrayListOptions().get(i) != null) {
+                        etAnswersArray[i].setText(newSurvey.getArrayListQuestions().get(questionIndexator).
+                                getArrayListOptions().get(i).getText());
+                    }
+                }
+
+
+            } else {
+                clearAllEditText();
+            }
             // Заполнить поля данными, если не null
         }
     }
