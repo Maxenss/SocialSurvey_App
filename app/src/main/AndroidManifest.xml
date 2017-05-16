@@ -35,6 +35,8 @@
         </activity>
         <activity android:name=".activity.SurveyFullInfoActivity">
         </activity>
+        <activity android:name=".activity.CreateNewSurvey">
+        </activity>
     </application>
 
 </manifest>

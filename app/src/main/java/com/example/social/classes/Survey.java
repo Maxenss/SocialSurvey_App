@@ -150,6 +150,12 @@ public class Survey {
         return null;
     }
 
+    public String getNewSurveyOnServerJSON(){
+        String result = "";
+
+        return result;
+    }
+
     @Override
     public String toString() {
         return "Count of questions - " + mArrayListQuestions.size() + " ";

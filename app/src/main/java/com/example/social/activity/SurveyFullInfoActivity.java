@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -100,22 +100,22 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
         linearLayout.addView(textViewName, TextViewParams);
         // -----------------------------------------------------------------------------------
 
-        // Работа с switchMultiple
-        Switch switchMultiple = new Switch(this);
-        LinearLayout.LayoutParams SwitchParams = new LinearLayout.LayoutParams(
+        // Работа с checkBoxMultiple
+        CheckBox checkBoxMultiple = new CheckBox(this);
+        LinearLayout.LayoutParams checkBoxMultipleParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        SwitchParams.setMargins(10, 10, 10, 10);
-        switchMultiple.setText("Множественный выбор");
-        switchMultiple.setTextColor(Color.parseColor("#000000"));
-        switchMultiple.setPadding(30, 0, 0, 0);
-        switchMultiple.setTextSize(17);
-        switchMultiple.setEnabled(false);
+        checkBoxMultipleParams.setMargins(10, 10, 10, 10);
+        checkBoxMultiple.setText("Множественный выбор");
+        checkBoxMultiple.setTextColor(Color.parseColor("#000000"));
+        checkBoxMultiple.setPadding(30, 0, 0, 0);
+        checkBoxMultiple.setTextSize(17);
+        checkBoxMultiple.setEnabled(false);
         if (Data.targetSurvey.getArrayListQuestions().get(index).getQuestionType().equals("Select"))
-            switchMultiple.setChecked(false);
+            checkBoxMultiple.setChecked(false);
         else
-            switchMultiple.setChecked(true);
-        linearLayout.addView(switchMultiple, SwitchParams);
+            checkBoxMultiple.setChecked(true);
+        linearLayout.addView(checkBoxMultiple, checkBoxMultipleParams);
         // -----------------------------------------------------------------------------------
 
         // Работа с ответами
