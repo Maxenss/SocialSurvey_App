@@ -150,10 +150,48 @@ public class Survey {
         return null;
     }
 
-    public String getNewSurveyOnServerJSON(){
-        String result = "";
+    public String getNewSurveyOnServerJSON() throws JSONException {
+        JSONObject resultJSON = new JSONObject();
+        JSONArray questionsJSON = new JSONArray();
+        JSONObject questionJSON = new JSONObject();
+        JSONArray optionsJSON = new JSONArray();
+        JSONObject optionJSON = new JSONObject();
 
-        return result;
+        try {
+            resultJSON.put("name", this.getName());
+            resultJSON.put("comment", this.getComment());
+
+            for (int i = 0; i < this.getArrayListQuestions().size(); i++) {
+                questionJSON = new JSONObject();
+                optionsJSON = new JSONArray();
+
+                questionJSON.put("questionType", this.getArrayListQuestions().get(i).getQuestionType());
+                questionJSON.put("text", this.getArrayListQuestions().get(i).getText());
+                //Что-то, возможно, костыльное
+                questionJSON.put("order", i + 1);
+               // questionJSON.put("isDeleted", this.getArrayListQuestions().get(i).isDeleted());
+
+                for (int j = 0; j < this.getArrayListQuestions().get(i).getArrayListOptions().size(); j++) {
+                    optionJSON = new JSONObject();
+
+                    optionJSON.put("text", this.getArrayListQuestions().get(i).getArrayListOptions().get(j).getText());
+                    //Что-то, возможно, костыльное
+                    optionJSON.put("order", j+1);
+
+                    optionsJSON.put(optionJSON);
+                }
+
+                questionJSON.put("options", optionsJSON);
+                questionsJSON.put(questionJSON);
+            }
+
+            resultJSON.put("questions", questionsJSON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("В фыаыфа " + resultJSON.toString());
+        return resultJSON.toString();
     }
 
     @Override

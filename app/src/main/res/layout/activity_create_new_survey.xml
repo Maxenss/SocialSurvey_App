@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/oval_button"
                 android:text="@string/ChangeContinue"
                 android:textSize="20dp"
@@ -101,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -584,7 +584,18 @@
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/oval_button"
-                        android:text="Предыдущий вопрос"
+                        android:text="Основное"
+                        android:textColor="#000000"/>
+
+                    <Button
+                        android:id="@+id/btCreateSurvey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/oval_button"
+                        android:text="Создать опрос"
                         android:textColor="#000000"/>
 
                 </LinearLayout>

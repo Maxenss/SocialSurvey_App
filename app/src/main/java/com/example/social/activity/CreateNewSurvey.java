@@ -1,5 +1,8 @@
 package com.example.social.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,10 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.social.R;
+import com.example.social.classes.Data;
 import com.example.social.classes.Option;
 import com.example.social.classes.Question;
 import com.example.social.classes.Survey;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class CreateNewSurvey extends AppCompatActivity implements View.OnClickListener {
@@ -54,10 +63,18 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
     Button btNextQuestion;
     Button btPreviosQuestion;
 
+    AlertDialog.Builder builder;
+
     Survey newSurvey;
 
     int countOfQuestions = 0;
-    int questionIndexator = 0;
+    int questionIndexator = -1;
+
+    private String requestData;
+    private String responseData;
+    private int responseCode;
+
+    private boolean isCorrect = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +195,63 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
+        if (questionIndexator < 0)
+            createExitDialog();
+
         btPreviosQuestionClick();
+    }
+
+    public void getBack(){
+        super.onBackPressed();
+    }
+
+    public void createExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateNewSurvey.this);
+        builder.setTitle("Вы уверены, что хотите покинуть конструктор опросов ?")
+                .setMessage("При выходе из конструктора, все данные будут удалены")
+                .setCancelable(true).setPositiveButton("Да",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getBack();
+                    }
+                })
+                .setNegativeButton("Нет",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void createNewSurveyDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateNewSurvey.this);
+        builder.setTitle("Создать новый опрос?")
+                .setMessage("Создать новый опрос? Позже его можно будет изменить")
+                .setCancelable(true)
+                .setNegativeButton("Нет",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Отправляем на сервер
+                try {
+                    createSurveyMethod();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void btContinueCreateSurveyClick() {
@@ -290,6 +363,9 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
         ++questionIndexator;
 
+        if(questionIndexator > 0)
+            btPreviosQuestion.setText("Предыдущий вопрос");
+
         if (questionIndexator < countOfQuestions) {
             tvQuestionNumber.setText(questionIndexator + 1 + ". Вопрос : ");
 
@@ -300,7 +376,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
             // Пока что костыль
             --questionIndexator;
             Toast.makeText(this, "Все вопросы созданы", Toast.LENGTH_SHORT).show();
-            // Отправляем на сервер
+            createNewSurveyDialog();
         }
 
     }
@@ -332,11 +408,88 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
                     }
                 }
 
+                if(questionIndexator == 0)
+                    btPreviosQuestion.setText("Основное");
 
             } else {
                 clearAllEditText();
             }
-            // Заполнить поля данными, если не null
+        }
+    }
+
+    // --------------------------------------------------------------//
+    //               Методы для создания опроса на сервере
+    // --------------------------------------------------------------//
+
+    private void createSurveyMethod() throws Exception {
+        CreateSurveyTask cs = new CreateSurveyTask();
+        cs.execute();
+    }
+
+    // HTTP Post request
+    private String makeRequestPost(String url) throws Exception {
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        responseData = "";
+        requestData = newSurvey.getNewSurveyOnServerJSON();
+
+        // Setting basic post request
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", "Bearer " + Data.token);
+        con.setRequestProperty("Content-Type", "application/json");
+
+        // Send post request
+        con.setDoOutput(true);
+        con.setDoInput(true);
+
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.writeBytes(requestData);
+        wr.flush();
+        wr.close();
+
+        responseCode = con.getResponseCode();
+        System.out.println("nSending 'POST' request to URL : " + url);
+        System.out.println("Post Data : " + requestData);
+        System.out.println("Response Code : " + responseCode);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String output;
+        StringBuffer response = new StringBuffer();
+
+        while ((output = in.readLine()) != null) {
+            response.append(output);
+        }
+        in.close();
+
+        responseData = response.toString();
+
+        System.out.println(responseData);
+        return responseData;
+    }
+
+    private class CreateSurveyTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                makeRequestPost(Data.URL + "api/surveys");
+                isCorrect = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isCorrect = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void res) {
+            if (isCorrect) {
+                Toast.makeText(CreateNewSurvey.this, "Опрос добавлен на сервер", Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(CreateNewSurvey.this, "Что-то  пошло не так", Toast.LENGTH_SHORT).show();
+
+            isCorrect = false;
         }
     }
 }

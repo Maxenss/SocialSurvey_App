@@ -63,6 +63,7 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
 
     private void showQuestions() {
         try {
+            System.out.println(Data.targetSurvey.getNewSurveyOnServerJSON());
             tvNameOfSurvey.setText(Data.targetSurvey.getName());
             tvCountOfQuetions.setText("Количество вопросов : " +
                     Data.targetSurvey.getArrayListQuestions().size());
