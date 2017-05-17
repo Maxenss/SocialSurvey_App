@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
     ScrollView svMainInfoNewSurvey;
     ScrollView svNewSurveyQuetions;
+
+    LinearLayout llResult;
 
     Switch swMultiple;
 
@@ -64,6 +67,10 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
     Button btPreviosQuestion;
 
     AlertDialog.Builder builder;
+
+    TextView tvResultOfCreate;
+    Button btExit;
+    Button btCreateMore;
 
     Survey newSurvey;
 
@@ -120,6 +127,12 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         evNewAnswer15 = (EditText) findViewById(R.id.evNewAnswer15);
         evNewAnswer16 = (EditText) findViewById(R.id.evNewAnswer16);
 
+        tvResultOfCreate = (TextView) findViewById(R.id.tvResultOfCreate);
+        btExit = (Button) findViewById(R.id.btExit);
+        btCreateMore = (Button) findViewById(R.id.btCreateMore);
+
+        llResult = (LinearLayout) findViewById(R.id.llResult);
+
         etAnswersArray[0] = evNewAnswer1;
         etAnswersArray[1] = evNewAnswer2;
         etAnswersArray[2] = evNewAnswer3;
@@ -145,6 +158,8 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         btContinueCreateSurvey.setOnClickListener(this);
         btNextQuestion.setOnClickListener(this);
         btPreviosQuestion.setOnClickListener(this);
+        btExit.setOnClickListener(this);
+        btCreateMore.setOnClickListener(this);
     }
 
     private void clearAllEditText() {
@@ -187,6 +202,14 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
                     btPreviosQuestionClick();
                     break;
                 }
+                case R.id.btExit: {
+                    btExitClick();
+                    break;
+                }
+                case R.id.btCreateMore: {
+                    btCreateMoreClick();
+                    break;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,7 +224,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         btPreviosQuestionClick();
     }
 
-    public void getBack(){
+    public void getBack() {
         super.onBackPressed();
     }
 
@@ -363,8 +386,11 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
         ++questionIndexator;
 
-        if(questionIndexator > 0)
+        if (questionIndexator > 0)
             btPreviosQuestion.setText("Предыдущий вопрос");
+
+        if (questionIndexator - 1 < countOfQuestions)
+            btNextQuestion.setText("Создать опрос");
 
         if (questionIndexator < countOfQuestions) {
             tvQuestionNumber.setText(questionIndexator + 1 + ". Вопрос : ");
@@ -385,6 +411,8 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         --questionIndexator;
 
         Question question;
+
+        btNextQuestion.setText("Следующий вопрос");
 
         if (questionIndexator < 0) {
             svMainInfoNewSurvey.setVisibility(View.VISIBLE);
@@ -408,13 +436,30 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
                     }
                 }
 
-                if(questionIndexator == 0)
+                if (questionIndexator == 0)
                     btPreviosQuestion.setText("Основное");
 
             } else {
                 clearAllEditText();
             }
         }
+    }
+
+    private void btExitClick() {
+        getBack();
+    }
+
+    private void btCreateMoreClick() {
+        questionIndexator = -1;
+
+        newSurvey = new Survey();
+
+        svMainInfoNewSurvey.setVisibility(View.VISIBLE);
+        svNewSurveyQuetions.setVisibility(View.GONE);
+        llResult.setVisibility(View.GONE);
+        btNextQuestion.setText("Следующий вопрос");
+
+        clearAllEditText();
     }
 
     // --------------------------------------------------------------//
@@ -436,14 +481,14 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         // Setting basic post request
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization", "Bearer " + Data.token);
-        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 
         // Send post request
         con.setDoOutput(true);
         con.setDoInput(true);
 
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(requestData);
+        wr.write(requestData.getBytes("UTF-8"));
         wr.flush();
         wr.close();
 
@@ -486,6 +531,13 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         protected void onPostExecute(Void res) {
             if (isCorrect) {
                 Toast.makeText(CreateNewSurvey.this, "Опрос добавлен на сервер", Toast.LENGTH_SHORT).show();
+
+                svMainInfoNewSurvey.setVisibility(View.GONE);
+                svNewSurveyQuetions.setVisibility(View.GONE);
+                llResult.setVisibility(View.VISIBLE);
+
+                tvResultOfCreate.setText("Опрос добавлен");
+
             } else
                 Toast.makeText(CreateNewSurvey.this, "Что-то  пошло не так", Toast.LENGTH_SHORT).show();
 

@@ -37,7 +37,7 @@
                 android:ems="10"
                 android:gravity="bottom"
                 android:hint="Введите пароль "
-                android:inputType="textPersonName"
+                android:inputType="textPassword"
                 android:paddingLeft="15dp"
                 android:text="qwerty"/>
 
