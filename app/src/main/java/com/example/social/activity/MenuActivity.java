@@ -100,7 +100,7 @@ public class MenuActivity extends Activity implements View.OnClickListener {
     }
 
     private void btCreateNewSurveyClick() {
-        startActivity(new Intent(this,  CreateNewSurvey.class));
+        startActivity(new Intent(this, CreateNewSurvey.class));
     }
 
     private void btViewSurveyClick() {
@@ -108,7 +108,7 @@ public class MenuActivity extends Activity implements View.OnClickListener {
     }
 
     private void btUsersInfoClick() {
-
+        startActivity(new Intent(this, UsersLIstActivity.class));
     }
 
     private void btStatisticsClick() {

@@ -1,5 +1,7 @@
 package com.example.social.classes;
 
+import java.util.ArrayList;
+
 /**
  * Created by Maxim on 03.05.2017.
  */
@@ -25,6 +27,7 @@ public class Data {
 
     public static Survey targetSurvey;
 
+    public static ArrayList<User> sUserArrayList;
 
     public static void setAccessLevel() {
         switch (role) {

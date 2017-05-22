@@ -60,7 +60,7 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
         getSurveysListTask.execute();
     }
 
-    // HTTP Post request
+    // HTTP GET request
     private String makeRequestGet(String url) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
