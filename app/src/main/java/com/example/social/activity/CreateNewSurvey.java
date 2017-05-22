@@ -66,8 +66,6 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
     Button btNextQuestion;
     Button btPreviosQuestion;
 
-    AlertDialog.Builder builder;
-
     TextView tvResultOfCreate;
     Button btExit;
     Button btCreateMore;

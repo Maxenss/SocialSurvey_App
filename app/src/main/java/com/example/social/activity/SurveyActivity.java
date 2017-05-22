@@ -1,5 +1,8 @@
 package com.example.social.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +38,7 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
     TextView tvNumberOfQuetion;
     TextView tvQuestionText;
     TextView tvQuestionType;
+    TextView tvResultOfSurvey;
 
     CheckBox cbQuestion1;
     CheckBox cbQuestion2;
@@ -57,8 +61,11 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
     Button btNextQuestion;
     Button btPreviosQuestion;
     Button btFinishSurvey;
+    Button btRepeatSurvey;
+    Button btToMenu;
 
     LinearLayout llSurveyInProcess;
+    LinearLayout llResOfSurvey;
 
     private PassedSurvey mPassedSurvey;
 
@@ -84,17 +91,11 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        String currentDateTimeString = ""; /*DateFormat.getDateInstance().format(new Date());*/
-
         // Опрос, который будет пройден
         mSurvey = Data.targetSurvey;
 
-        System.out.println("Как не крути сас " + mSurvey.getSurveyId());
-
         // Создаем объект "Пройденный опрос"
-        mPassedSurvey = new PassedSurvey(currentDateTimeString, mSurvey.getSurveyId());
-
-        mPassedSurvey.setStartDate(getCurrentTime());
+        mPassedSurvey = new PassedSurvey(getCurrentTime(), mSurvey.getSurveyId());
 
         showQuestion();
     }
@@ -103,6 +104,7 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
         tvNumberOfQuetion = (TextView) findViewById(R.id.tvNumberOfQuetion);
         tvQuestionText = (TextView) findViewById(R.id.tvQuetionText);
         tvQuestionType = (TextView) findViewById(R.id.tvQuestionType);
+        tvResultOfSurvey = (TextView) findViewById(R.id.tvResultOfSurvey);
 
         cbQuestion1 = (CheckBox) findViewById(R.id.cbQuestion1);
         cbQuestion2 = (CheckBox) findViewById(R.id.cbQuestion2);
@@ -125,13 +127,18 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
         btNextQuestion = (Button) findViewById(R.id.btNextQuestion);
         btPreviosQuestion = (Button) findViewById(R.id.btPreviosQuestion);
         btFinishSurvey = (Button) findViewById(R.id.btFinishSurvey);
+        btRepeatSurvey = (Button) findViewById(R.id.btRepeatSurvey);
+        btToMenu = (Button) findViewById(R.id.btToMenu);
 
         llSurveyInProcess = (LinearLayout) findViewById(R.id.llSurveyInProcess);
+        llResOfSurvey = (LinearLayout) findViewById(R.id.llResOfSurvey);
 
         btAnswer.setOnClickListener(this);
         btNextQuestion.setOnClickListener(this);
         btPreviosQuestion.setOnClickListener(this);
         btFinishSurvey.setOnClickListener(this);
+        btRepeatSurvey.setOnClickListener(this);
+        btToMenu.setOnClickListener(this);
 
         mCheckBoxesArrayList = new ArrayList<>();
 
@@ -186,6 +193,12 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
                 case R.id.btFinishSurvey:
                     btFinishSurveyClick();
                     return;
+                case R.id.btRepeatSurvey:
+                    btRepeatSurveyClick();
+                    return;
+                case R.id.btToMenu:
+                    btToMenuClick();
+                    return;
             }
 
             // Для CheckBox'ов
@@ -205,6 +218,11 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
             e.printStackTrace();
             Toast.makeText(this, "Что-то пошло не так", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        createExitDialog();
     }
 
     private void showQuestion() {
@@ -255,7 +273,12 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
         mPassedSurvey.getAnswers().add(mQuestionIndexator, answer);
 
         ++mQuestionIndexator;
-        showQuestion();
+
+        if (mQuestionIndexator < mSurvey.getArrayListQuestions().size()) {
+            showQuestion();
+        } else {
+            btFinishSurveyClick();
+        }
     }
 
     private void btNextQuestionClick() {
@@ -265,13 +288,56 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void btFinishSurveyClick() {
-        mPassedSurvey.setEndDate(getCurrentTime());
-
-        try {
-            sendPassedSurveyMethod();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (mQuestionIndexator == mSurvey.getArrayListQuestions().size()) {
+            mPassedSurvey.setEndDate(getCurrentTime());
+            try {
+                sendPassedSurveyMethod();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(this, "Вы ответили не на все вопросы", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void btRepeatSurveyClick() {
+        // Создаем объект "Пройденный опрос"
+        mPassedSurvey = new PassedSurvey(getCurrentTime(), mSurvey.getSurveyId());
+        llSurveyInProcess.setVisibility(View.VISIBLE);
+        llResOfSurvey.setVisibility(View.GONE);
+
+        mQuestionIndexator = 0;
+
+        showQuestion();
+    }
+
+    private void btToMenuClick() {
+        startActivity(new Intent(this, InterwierSurveyListActivity.class));
+    }
+
+    private void createExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Завершить опрос")
+                .setMessage("При выходе из опроса, все данные будут удалены")
+                .setCancelable(true).setPositiveButton("Да",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getBack();
+                    }
+                })
+                .setNegativeButton("Нет",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void getBack() {
+        super.onBackPressed();
     }
 
     private String getCurrentTime() {
@@ -282,6 +348,7 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
 
         return nowAsISO;
     }
+
     // --------------------------------------------------------------//
     //           Методы для отправки результата опроса на сервер
     // --------------------------------------------------------------//
@@ -349,10 +416,15 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(Void res) {
+            llSurveyInProcess.setVisibility(View.GONE);
+            llResOfSurvey.setVisibility(View.VISIBLE);
             if (isCorrect) {
                 Toast.makeText(SurveyActivity.this, "Корректно", Toast.LENGTH_SHORT).show();
-            } else
-                Toast.makeText(SurveyActivity.this, "Не гуд", Toast.LENGTH_SHORT).show();
+
+                tvResultOfSurvey.setText("Результат опроса отправлен на сервер");
+            } else {
+                tvResultOfSurvey.setText("Возникла ошибка при отправлении опроса на сервер");
+            }
 
             isCorrect = false;
         }

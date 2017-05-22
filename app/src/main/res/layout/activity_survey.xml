@@ -9,10 +9,48 @@
     tools:context="com.example.social.activity.SurveyActivity">
 
     <LinearLayout
+        android:id="@+id/llResOfSurvey"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvResultOfSurvey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btRepeatSurvey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/oval_button"
+            android:text="Повторить опрос"/>
+
+        <Button
+            android:id="@+id/btToMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/oval_button"
+            android:text="К выбору опроса"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/llSurveyInProcess"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/tvNumberOfQuetion"
