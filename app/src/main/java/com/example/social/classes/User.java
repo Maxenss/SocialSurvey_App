@@ -1,5 +1,7 @@
 package com.example.social.classes;
 
+import org.json.JSONObject;
+
 /**
  * Created by Maxim on 22.05.2017.
  */
@@ -11,6 +13,7 @@ public class User {
     private String lastName;
     private String middleName;
     private String role;
+    private String password = " ";
     private boolean isDeleted;
 
     public User(int userId, String login, String firstName,
@@ -82,4 +85,31 @@ public class User {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getJSONForSetDataOnServer() {
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put("userId", userId);
+            data.put("firstName", firstName);
+            data.put("lastName", lastName);
+            data.put("middleName", middleName);
+            data.put("role", role);
+            // Чекнуть,если что
+            data.put("passsword", password);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return data.toString();
+    }
+
 }

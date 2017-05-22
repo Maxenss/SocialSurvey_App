@@ -73,12 +73,14 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/settings"
-            android:onClick="Settings"/>
+            android:onClick="Settings"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btExit"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/button_cancel"
             android:onClick="Exit"/>
 

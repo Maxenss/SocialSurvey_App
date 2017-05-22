@@ -6,72 +6,88 @@
     android:id="@+id/llSignIn"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bluebackground"
     tools:context="com.example.social.activity.LoginActivity">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_centerInParent="true"
+            android:layout_marginTop="105dp">
 
-            <EditText
-                android:id="@+id/etLogin"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:ems="10"
-                android:gravity="bottom"
-                android:hint="Введите логин"
-                android:inputType="textPersonName"
-                android:paddingLeft="15dp"
-                android:text="Admin"/>
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:ems="10"
-                android:gravity="bottom"
-                android:hint="Введите пароль "
-                android:inputType="textPassword"
-                android:paddingLeft="15dp"
-                android:text="qwerty"/>
+                <EditText
+                    android:id="@+id/etLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="5dp"
+                    android:ems="10"
+                    android:gravity="bottom|center"
+                    android:hint="Введите логин"
+                    android:inputType="textPersonName"
+                    android:text="Admin"
+                    android:textColor="#FFFFFF"/>
 
-            <Button
-                android:id="@+id/btLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/oval_button"
-                android:text="Вход"
-                android:textStyle="bold"/>
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="5dp"
+                    android:ems="10"
+                    android:gravity="bottom|center"
+                    android:hint="Введите пароль "
+                    android:inputType="textPassword"
+                    android:text="qwerty"
+                    android:textColor="#FFFFFF"/>
 
-            <Button
-                android:id="@+id/btRegistration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/oval_button"
-                android:text="Регистрация "
-                android:textStyle="bold"/>
+                <Button
+                    android:id="@+id/btLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/oval_button"
+                    android:text="Вход"
+                    android:textStyle="bold"/>
 
-            <Button
-                android:id="@+id/btTest1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/oval_button"
-                android:text="Just for Testing :)"/>
-        </LinearLayout>
-    </ScrollView>
+                <Button
+                    android:id="@+id/btRegistration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/oval_button"
+                    android:text="Регистрация "
+                    android:textStyle="bold"/>
+
+                <Button
+                    android:id="@+id/btTest1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/oval_button"
+                    android:text="Just for Testing :)"
+                    android:visibility="gone"/>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
 </LinearLayout>

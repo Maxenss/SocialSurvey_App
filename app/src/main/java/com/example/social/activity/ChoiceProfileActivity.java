@@ -85,7 +85,7 @@ public class ChoiceProfileActivity extends Activity {
     }
 
     public void Exit(View v) {
-        Toast.makeText(ChoiceProfileActivity.this, "Exit", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     private void creatActivitySelect() {

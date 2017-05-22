@@ -1,5 +1,6 @@
 package com.example.social.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -109,11 +110,13 @@ public class UsersLIstActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //System.out.println(position);
+        try {
+            Data.sTempUser = Data.sUserArrayList.get(position);
 
-        // Data.surveyId = mSurveyShortArrayList.get(position).getSurveyId();
-
-        //startActivity(new Intent(this, SurveyFullInfoActivity.class));
+            startActivity(new Intent(this, UserFullInfoActivity.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // --------------------------------------------------------------//

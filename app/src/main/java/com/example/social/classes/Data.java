@@ -29,6 +29,8 @@ public class Data {
 
     public static ArrayList<User> sUserArrayList;
 
+    public static User sTempUser;
+
     public static void setAccessLevel() {
         switch (role) {
             case "Interviewer":

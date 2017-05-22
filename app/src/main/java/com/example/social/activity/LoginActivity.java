@@ -204,7 +204,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
 
             signInFlag = false;
-            llSignIn.setEnabled(true);
         }
     }
 
@@ -213,8 +212,6 @@ public class LoginActivity extends AppCompatActivity {
     // --------------------------------------------------------------//
 
     private void getInfoMethod() throws Exception {
-        llSignIn.setEnabled(false);
-
         GetInfoTask task = new GetInfoTask();
         task.execute();
     }
