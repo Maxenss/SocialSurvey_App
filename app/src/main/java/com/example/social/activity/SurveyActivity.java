@@ -1,22 +1,39 @@
 package com.example.social.activity;
 
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.social.R;
+import com.example.social.classes.Answer;
+import com.example.social.classes.Data;
+import com.example.social.classes.PassedSurvey;
+import com.example.social.classes.Question;
+import com.example.social.classes.Survey;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
+
+import static android.view.View.GONE;
 
 public class SurveyActivity extends AppCompatActivity implements View.OnClickListener {
-
-    // Счетчик для вопросов
-    private int mQuestionIndexator;
-
     TextView tvNumberOfQuetion;
-    TextView tvQuetionText;
+    TextView tvQuestionText;
     TextView tvQuestionType;
 
     CheckBox cbQuestion1;
@@ -41,6 +58,22 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
     Button btPreviosQuestion;
     Button btFinishSurvey;
 
+    LinearLayout llSurveyInProcess;
+
+    private PassedSurvey mPassedSurvey;
+
+    private Survey mSurvey;
+
+    private ArrayList<CheckBox> mCheckBoxesArrayList;
+
+    // Счетчик для вопросов
+    private int mQuestionIndexator;
+
+    private String requestData;
+    private String responseData;
+    private int responseCode;
+    private boolean isCorrect = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +83,25 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
         initializeViews();
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        String currentDateTimeString = ""; /*DateFormat.getDateInstance().format(new Date());*/
+
+        // Опрос, который будет пройден
+        mSurvey = Data.targetSurvey;
+
+        System.out.println("Как не крути сас " + mSurvey.getSurveyId());
+
+        // Создаем объект "Пройденный опрос"
+        mPassedSurvey = new PassedSurvey(currentDateTimeString, mSurvey.getSurveyId());
+
+        mPassedSurvey.setStartDate(getCurrentTime());
+
+        showQuestion();
     }
 
     private void initializeViews() {
         tvNumberOfQuetion = (TextView) findViewById(R.id.tvNumberOfQuetion);
-        tvQuetionText = (TextView) findViewById(R.id.tvQuetionText);
+        tvQuestionText = (TextView) findViewById(R.id.tvQuetionText);
         tvQuestionType = (TextView) findViewById(R.id.tvQuestionType);
 
         cbQuestion1 = (CheckBox) findViewById(R.id.cbQuestion1);
@@ -79,31 +126,136 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
         btPreviosQuestion = (Button) findViewById(R.id.btPreviosQuestion);
         btFinishSurvey = (Button) findViewById(R.id.btFinishSurvey);
 
+        llSurveyInProcess = (LinearLayout) findViewById(R.id.llSurveyInProcess);
+
         btAnswer.setOnClickListener(this);
         btNextQuestion.setOnClickListener(this);
         btPreviosQuestion.setOnClickListener(this);
         btFinishSurvey.setOnClickListener(this);
+
+        mCheckBoxesArrayList = new ArrayList<>();
+
+        mCheckBoxesArrayList.add(cbQuestion1);
+        mCheckBoxesArrayList.add(cbQuestion2);
+        mCheckBoxesArrayList.add(cbQuestion3);
+        mCheckBoxesArrayList.add(cbQuestion4);
+        mCheckBoxesArrayList.add(cbQuestion5);
+        mCheckBoxesArrayList.add(cbQuestion6);
+        mCheckBoxesArrayList.add(cbQuestion7);
+        mCheckBoxesArrayList.add(cbQuestion8);
+        mCheckBoxesArrayList.add(cbQuestion9);
+        mCheckBoxesArrayList.add(cbQuestion10);
+        mCheckBoxesArrayList.add(cbQuestion11);
+        mCheckBoxesArrayList.add(cbQuestion12);
+        mCheckBoxesArrayList.add(cbQuestion13);
+        mCheckBoxesArrayList.add(cbQuestion14);
+        mCheckBoxesArrayList.add(cbQuestion15);
+        mCheckBoxesArrayList.add(cbQuestion16);
+
+        cbQuestion1.setOnClickListener(this);
+        cbQuestion2.setOnClickListener(this);
+        cbQuestion3.setOnClickListener(this);
+        cbQuestion4.setOnClickListener(this);
+        cbQuestion5.setOnClickListener(this);
+        cbQuestion6.setOnClickListener(this);
+        cbQuestion7.setOnClickListener(this);
+        cbQuestion8.setOnClickListener(this);
+        cbQuestion9.setOnClickListener(this);
+        cbQuestion10.setOnClickListener(this);
+        cbQuestion11.setOnClickListener(this);
+        cbQuestion12.setOnClickListener(this);
+        cbQuestion13.setOnClickListener(this);
+        cbQuestion14.setOnClickListener(this);
+        cbQuestion15.setOnClickListener(this);
+        cbQuestion16.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btAnswer:
-                btAnswerClick();
-                break;
-            case R.id.btNextQuestion:
-                btNextQuestionClick();
-                break;
-            case R.id.btPreviosQuestion:
-                btPreviosQuestionClick();
-                break;
-            case R.id.btFinishSurvey:
-                btFinishSurveyClick();
-                break;
+        try {
+            switch (v.getId()) {
+                case R.id.btAnswer:
+                    btAnswerClick();
+                    return;
+                case R.id.btNextQuestion:
+                    btNextQuestionClick();
+                    return;
+                case R.id.btPreviosQuestion:
+                    btPreviosQuestionClick();
+                    return;
+                case R.id.btFinishSurvey:
+                    btFinishSurveyClick();
+                    return;
+            }
+
+            // Для CheckBox'ов
+            boolean isMultiply = mSurvey.getArrayListQuestions().
+                    get(mQuestionIndexator).
+                    getQuestionType().
+                    equals("MultiSelect");
+
+            CheckBox checkBox = (CheckBox) v;
+
+            if (!isMultiply) {
+                for (int i = 0; i < mCheckBoxesArrayList.size(); i++)
+                    mCheckBoxesArrayList.get(i).setChecked(false);
+                checkBox.setChecked(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Что-то пошло не так", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void showQuestion() {
+        Question question = mSurvey.getArrayListQuestions().get(mQuestionIndexator);
+
+        tvNumberOfQuetion.setText("Вопрос: " + (mQuestionIndexator + 1 + "/"
+                + mSurvey.getArrayListQuestions().size()));
+
+        tvQuestionText.setText(question.getText());
+
+        if (question.getQuestionType().equals("Select"))
+            tvQuestionType.setText("Одиночный выбор");
+        else
+            tvQuestionType.setText("Множественный выбор");
+
+        for (int i = 0; i < mCheckBoxesArrayList.size(); i++) {
+            mCheckBoxesArrayList.get(i).setVisibility(GONE);
+            mCheckBoxesArrayList.get(i).setChecked(false);
+        }
+
+        for (int i = 0; i < question.getArrayListOptions().size(); i++) {
+            mCheckBoxesArrayList.get(i).setVisibility(View.VISIBLE);
+            mCheckBoxesArrayList.get(i).setText((i + 1) + ") " + question.getArrayListOptions().get(i).getText() + ".");
+        }
+
+    }
+
     private void btAnswerClick() {
+        boolean flagIsChose = false;
+        for (int i = 0; i < mCheckBoxesArrayList.size(); i++) {
+            flagIsChose = mCheckBoxesArrayList.get(i).isChecked();
+
+            if (flagIsChose) break;
+        }
+
+        if (!flagIsChose) {
+            Toast.makeText(this, "Выберите ответ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Question question = mSurvey.getArrayListQuestions().get(mQuestionIndexator);
+        Answer answer = new Answer(question.getQuestionId(), question.getText());
+
+        for (int i = 0; i < mCheckBoxesArrayList.size(); i++)
+            if (mCheckBoxesArrayList.get(i).isChecked())
+                answer.getAnswersId().add(question.getArrayListOptions().get(i).getOptionId());
+
+        mPassedSurvey.getAnswers().add(mQuestionIndexator, answer);
+
+        ++mQuestionIndexator;
+        showQuestion();
     }
 
     private void btNextQuestionClick() {
@@ -113,5 +265,96 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void btFinishSurveyClick() {
+        mPassedSurvey.setEndDate(getCurrentTime());
+
+        try {
+            sendPassedSurveyMethod();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getCurrentTime() {
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        df.setTimeZone(tz);
+        String nowAsISO = df.format(new Date());
+
+        return nowAsISO;
+    }
+    // --------------------------------------------------------------//
+    //           Методы для отправки результата опроса на сервер
+    // --------------------------------------------------------------//
+
+    private void sendPassedSurveyMethod() throws Exception {
+        SendPassedSurveyTask spst = new SendPassedSurveyTask();
+        spst.execute();
+    }
+
+    // HTTP Post request
+    private String makeRequestPost(String url) throws Exception {
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        responseData = "";
+        requestData = mPassedSurvey.getJSONFromPassedSurvey();
+
+        // Setting basic post request
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", "Bearer " + Data.token);
+        con.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+        // Send post request
+        con.setDoOutput(true);
+        con.setDoInput(true);
+
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.write(requestData.getBytes("UTF-8"));
+        wr.flush();
+        wr.close();
+
+        responseCode = con.getResponseCode();
+        System.out.println("nSending 'POST' request to URL : " + url);
+        System.out.println("Post Data : " + requestData);
+        System.out.println("Response Code : " + responseCode);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String output;
+        StringBuffer response = new StringBuffer();
+
+        while ((output = in.readLine()) != null) {
+            response.append(output);
+        }
+        in.close();
+
+        responseData = response.toString();
+
+        System.out.println(responseData);
+        return responseData;
+    }
+
+    private class SendPassedSurveyTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                makeRequestPost(Data.URL + "api/forms");
+                isCorrect = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isCorrect = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void res) {
+            if (isCorrect) {
+                Toast.makeText(SurveyActivity.this, "Корректно", Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(SurveyActivity.this, "Не гуд", Toast.LENGTH_SHORT).show();
+
+            isCorrect = false;
+        }
     }
 }

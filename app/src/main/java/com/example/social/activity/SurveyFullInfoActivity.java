@@ -1,5 +1,6 @@
 package com.example.social.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
         btStartSurvey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SurveyFullInfoActivity.this, "Дирижабль? Ага!!!", Toast.LENGTH_SHORT).show();
+                btStartSurveyClick();
             }
         });
 
@@ -59,6 +60,10 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void btStartSurveyClick() {
+        startActivity(new Intent(this, SurveyActivity.class));
     }
 
     private void showQuestions() {

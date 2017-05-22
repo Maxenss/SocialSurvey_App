@@ -123,7 +123,7 @@ public class PassedSurvey {
                     answersIdJSONArray.put(mAnswers.get(i).getAnswersId().get(j));
                 }
 
-                answerJSONObject.put("answersId", answersIdJSONArray);
+                answerJSONObject.put("optionsId", answersIdJSONArray);
 
                 answersJSONArray.put(answerJSONObject);
             }

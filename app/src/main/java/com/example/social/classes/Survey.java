@@ -109,6 +109,7 @@ public class Survey {
             tempSurvey.setName(surveyJsonObj.getString("name"));
             tempSurvey.setComment(surveyJsonObj.getString("comment"));
             tempSurvey.setDeleted(surveyJsonObj.getBoolean("isDeleted"));
+            tempSurvey.setSurveyId(surveyJsonObj.getInt("surveyId"));
             tempSurvey.setUserId(surveyJsonObj.getInt("userId"));
 
 
