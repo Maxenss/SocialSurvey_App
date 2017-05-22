@@ -37,6 +37,10 @@
         </activity>
         <activity android:name=".activity.CreateNewSurvey">
         </activity>
+        <activity android:name=".activity.UsersLIstActivity">
+        </activity>
+        <activity android:name=".activity.SurveyActivity">
+        </activity>
     </application>
 
 </manifest>
