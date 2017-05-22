@@ -1,5 +1,6 @@
 package com.example.social.activity;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -30,8 +32,11 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText etLastName;
     EditText etMiddleName;
     Button btCreateAccount;
+    Button btBack;
 
     LinearLayout llRegistration;
+
+    private ProgressDialog pd;
 
     String userLogin;
     String userPassword;
@@ -44,7 +49,11 @@ public class RegistrationActivity extends AppCompatActivity {
     String responseData;
 
     int responseCode;
-    boolean isRegistered = false;
+    int regError = 0;
+
+    private static final int GOOD = 0;
+    private static final int EXIST = 1;
+    private static final int NETERROR = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +69,7 @@ public class RegistrationActivity extends AppCompatActivity {
         etMiddleName = (EditText) findViewById(R.id.etMiddleName);
 
         btCreateAccount = (Button) findViewById(R.id.btCreateAccount);
+        btBack = (Button) findViewById(R.id.btBack);
 
         llRegistration = (LinearLayout) findViewById(R.id.llRegistration);
 
@@ -69,7 +79,17 @@ public class RegistrationActivity extends AppCompatActivity {
                 btCreateAccountClick();
             }
         });
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btBackClick();
+            }
+        });
 
+    }
+
+    private void btBackClick() {
+        super.onBackPressed();
     }
 
     private void btCreateAccountClick() {
@@ -115,7 +135,7 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
 
-        if (!userPassword.equals(passwordConfirm)){
+        if (!userPassword.equals(passwordConfirm)) {
             Toast.makeText(this, "Пароли должны совпадать", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -126,15 +146,19 @@ public class RegistrationActivity extends AppCompatActivity {
 
         try {
             registationMethod();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(RegistrationActivity.this, "Ошибка на этапе регистрации", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void createProgressDialog() {
+        pd = new ProgressDialog(this);
+        pd.setTitle("Загрузка");
+        pd.setMessage("Ожидание ответа от сервера");
+        pd.show();
+    }
+
     private void registationMethod() throws Exception {
-        llRegistration.setEnabled(false);
         Map<String, String> hashMapParams = new HashMap<>();
 
         hashMapParams.put("login", userLogin);
@@ -145,6 +169,8 @@ public class RegistrationActivity extends AppCompatActivity {
         hashMapParams.put("middleName", middleName);
 
         requsetData = new GsonBuilder().create().toJson(hashMapParams, Map.class);
+
+        createProgressDialog();
 
         RegistrationTask pt = new RegistrationTask();
         pt.execute();
@@ -194,22 +220,26 @@ public class RegistrationActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 makeRequest(Data.URL + "register", requsetData);
-                isRegistered = true;
+                regError = GOOD;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                regError = EXIST;
             } catch (Exception e) {
                 e.printStackTrace();
-                isRegistered = false;
+                regError = NETERROR;
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void res) {
-           // super.onPostExecute(res);
-            llRegistration.setEnabled(true);
-            if(isRegistered)
+            pd.cancel();
+            if (regError == GOOD)
                 Toast.makeText(RegistrationActivity.this, "Регистрация прошла успешно", Toast.LENGTH_SHORT).show();
+            else if (regError == EXIST)
+                Toast.makeText(RegistrationActivity.this, "Аккаунт с таким профилем существует", Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(RegistrationActivity.this, "Ошибка на этапе регистрации", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegistrationActivity.this, "Ошибка сети", Toast.LENGTH_SHORT).show();
         }
     }
 }

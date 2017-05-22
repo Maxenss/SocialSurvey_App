@@ -1,5 +1,6 @@
 package com.example.social.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
 
     private ArrayList<SurveyShort> mSurveyShortArrayList;
 
+    private ProgressDialog pd;
+
     ListView lvSusrvesyShort;
 
     @Override
@@ -51,11 +54,19 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
         }
     }
 
+    private void createProgressDialog(){
+        pd = new ProgressDialog(this);
+        pd.setTitle("Загрузка");
+        pd.setMessage("Ожидание ответа от сервера");
+        pd.show();
+    }
+
     // --------------------------------------------------------------//
     //               Методы для получения инфы о опросах
     // --------------------------------------------------------------//
 
     private void getSurveysListMethod() throws Exception {
+        createProgressDialog();
         GetSurveysListTask getSurveysListTask = new GetSurveysListTask();
         getSurveysListTask.execute();
     }
@@ -107,6 +118,7 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
 
         @Override
         protected void onPostExecute(Void res) {
+            pd.cancel();
             if (isCorrect) {
                 parseJSON();
                 createListView();

@@ -26,7 +26,6 @@ import java.util.HashMap;
 public class UsersLIstActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     ListView lvUsersList;
 
-    private String requestData;
     private String responseData;
     private int responseCode;
     private boolean isCorrect = false;

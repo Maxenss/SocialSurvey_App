@@ -3,7 +3,6 @@ package com.example.social.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -88,8 +87,6 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
         setTitle("Прохождение опроса");
 
         initializeViews();
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Опрос, который будет пройден
         mSurvey = Data.targetSurvey;

@@ -1,5 +1,6 @@
 package com.example.social.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -29,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btRegistration;
     private Button btTest1;
     private LinearLayout llSignIn;
+
+    private ProgressDialog pd;
 
     private String userLogin;
     private String userPassword;
@@ -74,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void test(){
+    private void test() {
         startActivity(new Intent(this, SurveyActivity.class));
     }
 
@@ -94,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         try {
+            createProgressDialog();
             signInMethod();
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,6 +107,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void btRegistrationClick() {
         startActivity(new Intent(this, RegistrationActivity.class));
+    }
+
+    private void createProgressDialog(){
+        pd = new ProgressDialog(this);
+        pd.setTitle("Загрузка");
+        pd.setMessage("Ожидание ответа от сервера");
+        pd.show();
     }
 
     // --------------------------------------------------------------//
@@ -173,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void res) {
+            pd.cancel();
             if (signInFlag) {
                 Toast.makeText(LoginActivity.this, "Вы залогинены", Toast.LENGTH_SHORT).show();
 

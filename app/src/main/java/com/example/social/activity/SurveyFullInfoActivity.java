@@ -1,5 +1,6 @@
 package com.example.social.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -23,7 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class SurveyFullInfoActivity extends AppCompatActivity {
-
     private String responseData;
     private int responseCode;
 
@@ -35,6 +35,8 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
     TextView tvNameOfSurvey;
     TextView tvCountOfQuetions;
     Button btStartSurvey;
+
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,13 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
 
     private void btStartSurveyClick() {
         startActivity(new Intent(this, SurveyActivity.class));
+    }
+
+    private void createProgressDialog(){
+        pd = new ProgressDialog(this);
+        pd.setTitle("Загрузка");
+        pd.setMessage("Ожидание ответа от сервера");
+        pd.show();
     }
 
     private void showQuestions() {
@@ -149,6 +158,7 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
     // --------------------------------------------------------------//
 
     private void getSurveyFullMethod() throws Exception {
+        createProgressDialog();
         GetSurveyFullTask getSurveyFullTask = new GetSurveyFullTask();
         getSurveyFullTask.execute();
     }
@@ -200,6 +210,7 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void res) {
+            pd.cancel();
             if (isCorrect) {
                 Data.targetSurvey = Survey.getSurveyFromJSON(responseData);
                 showQuestions();

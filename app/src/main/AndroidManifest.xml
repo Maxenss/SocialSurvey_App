@@ -16,31 +16,59 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name=".activity.LoginActivity">
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ChoiceProfileActivity"/>
-        <activity android:name=".activity.HelpActivity"/>
-        <activity android:name=".activity.MenuActivity"/>
-        <activity android:name=".createQuestionnaire"/>
-        <activity android:name=".addquestions"/>
+        <activity
+            android:name=".activity.ChoiceProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.HelpActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.MenuActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".createQuestionnaire"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".addquestions"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity_with_created_quiz"/>
-        <activity android:name=".activity.RegistrationActivity">
+        <activity
+            android:name=".activity.RegistrationActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.InterwierSurveyListActivity">
+        <activity
+            android:name=".activity.InterwierSurveyListActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.SurveyFullInfoActivity">
+        <activity
+            android:name=".activity.SurveyFullInfoActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.CreateNewSurvey">
+        <activity
+            android:name=".activity.CreateNewSurvey"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.UsersLIstActivity">
+        <activity
+            android:name=".activity.UsersLIstActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.SurveyActivity">
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".activity.SurveyActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".activity.UserFullInfoActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
