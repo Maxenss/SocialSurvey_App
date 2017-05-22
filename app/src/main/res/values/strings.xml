@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Social</string>
+    <string name="app_name">Social App Client</string>
     <string name="help">
         \u0020\u0020\u0020Администратор имеет полный доступ к анкетам;\n\n
         \u0020\u0020\u0020Контролёр имеет возможность просматривать анкеты без внесения изменений;\n\n
