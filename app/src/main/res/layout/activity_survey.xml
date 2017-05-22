@@ -1,10 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.social.activity.SurveyActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvNumberOfQuetion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:paddingLeft="5dp"
+                android:text="Счетчик вопросов"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/tvQuetionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:paddingLeft="5dp"
+                android:text="Текст вопроса"
+                android:textSize="22sp"/>
+
+            <TextView
+                android:id="@+id/tvQuestionType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Множественный выбор"
+                android:textSize="20sp"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="100">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/oval_azure"
+                        android:checked="true"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion13"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion14"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion15"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                    <CheckBox
+                        android:id="@+id/cbQuestion16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:paddingLeft="10dp"
+                        android:text="CheckBox"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+            </ScrollView>
+
+            <Button
+                android:id="@+id/btAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/oval_button"
+                android:text="Ответить"/>
+
+            <Button
+                android:id="@+id/btNextQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/oval_button"
+                android:text="Следующий вопрос"/>
+
+            <Button
+                android:id="@+id/btPreviosQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/oval_button"
+                android:text="Предыдущий вопрос"/>
+
+            <Button
+                android:id="@+id/btFinishSurvey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/oval_button"
+                android:text="Завершить опрос"/>
+
+        </LinearLayout>
+
+</LinearLayout>

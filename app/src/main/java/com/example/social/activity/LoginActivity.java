@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button btLogin;
     private Button btRegistration;
+    private Button btTest1;
     private LinearLayout llSignIn;
 
     private String userLogin;
@@ -48,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         btLogin = (Button) findViewById(R.id.btLogin);
         btRegistration = (Button) findViewById(R.id.btRegistration);
+        btTest1 = (Button) findViewById(R.id.btTest1);
         llSignIn = (LinearLayout) findViewById(R.id.llSignIn);
 
         btLogin.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +65,17 @@ public class LoginActivity extends AppCompatActivity {
                 btRegistrationClick();
             }
         });
+
+        btTest1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                test();
+            }
+        });
+    }
+
+    private void test(){
+        startActivity(new Intent(this, SurveyActivity.class));
     }
 
     private void btLoginClick() {
