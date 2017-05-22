@@ -40,6 +40,7 @@
         <activity android:name=".activity.UsersLIstActivity">
         </activity>
         <activity android:name=".activity.SurveyActivity">
+            android:screenOrientation="portrait"
         </activity>
     </application>
 

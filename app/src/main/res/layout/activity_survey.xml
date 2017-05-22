@@ -201,41 +201,49 @@
                 </LinearLayout>
             </ScrollView>
 
-            <Button
-                android:id="@+id/btAnswer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/oval_button"
-                android:text="Ответить"/>
 
-            <Button
-                android:id="@+id/btNextQuestion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/oval_button"
-                android:text="Следующий вопрос"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btPreviosQuestion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/oval_button"
-                android:text="Предыдущий вопрос"/>
+                    <Button
+                        android:id="@+id/btAnswer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/oval_button"
+                        android:text="Ответить"/>
 
-            <Button
-                android:id="@+id/btFinishSurvey"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/oval_button"
-                android:text="Завершить опрос"/>
+                    <Button
+                        android:id="@+id/btNextQuestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/oval_button"
+                        android:text="Следующий вопрос"/>
+
+                    <Button
+                        android:id="@+id/btPreviosQuestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/oval_button"
+                        android:text="Предыдущий вопрос"/>
+
+                    <Button
+                        android:id="@+id/btFinishSurvey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/oval_button"
+                        android:text="Завершить опрос"/>
+
+                </LinearLayout>
 
         </LinearLayout>
 
