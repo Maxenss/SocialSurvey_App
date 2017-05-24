@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -38,10 +40,13 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
 
     private ProgressDialog pd;
 
+    private Animation animation ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_full_info);
+        setTitle("Просмотр опроса");
 
         LinearLayoutWithQuestionsArrayList = new ArrayList<>();
 
@@ -50,9 +55,12 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
         tvCountOfQuetions = (TextView) findViewById(R.id.tvCountOfQuetions);
         btStartSurvey = (Button) findViewById(R.id.btStartSurvey);
 
+        animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
+
         btStartSurvey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(animation);
                 btStartSurveyClick();
             }
         });
@@ -68,7 +76,7 @@ public class SurveyFullInfoActivity extends AppCompatActivity {
         startActivity(new Intent(this, SurveyActivity.class));
     }
 
-    private void createProgressDialog(){
+    private void createProgressDialog() {
         pd = new ProgressDialog(this);
         pd.setTitle("Загрузка");
         pd.setMessage("Ожидание ответа от сервера");

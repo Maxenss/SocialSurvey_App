@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -33,7 +35,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
     EditText etCountOfQuestions;
 
     ScrollView svMainInfoNewSurvey;
-    ScrollView svNewSurveyQuetions;
+    LinearLayout llNewSurveyQuetions;
 
     LinearLayout llResult;
 
@@ -70,6 +72,8 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
     Button btExit;
     Button btCreateMore;
 
+    private Animation animation;
+
     Survey newSurvey;
 
     int countOfQuestions = 0;
@@ -102,7 +106,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         btContinueCreateSurvey = (Button) findViewById(R.id.btContinueCreateSurvey);
 
         svMainInfoNewSurvey = (ScrollView) findViewById(R.id.svMainInfoNewSurvey);
-        svNewSurveyQuetions = (ScrollView) findViewById(R.id.svNewSurveyQuetions);
+        llNewSurveyQuetions = (LinearLayout) findViewById(R.id.llNewSurveyQuetions);
 
         swMultiple = (Switch) findViewById(R.id.swMultiple);
 
@@ -158,6 +162,8 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         btPreviosQuestion.setOnClickListener(this);
         btExit.setOnClickListener(this);
         btCreateMore.setOnClickListener(this);
+
+        animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
     }
 
     private void clearAllEditText() {
@@ -186,6 +192,8 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        v.startAnimation(animation);
+
         try {
             switch (v.getId()) {
                 case R.id.btContinueCreateSurvey: {
@@ -313,7 +321,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         newSurvey.setArrayListQuestions(new ArrayList<Question>(countOfQuestions));
 
         svMainInfoNewSurvey.setVisibility(View.GONE);
-        svNewSurveyQuetions.setVisibility(View.VISIBLE);
+        llNewSurveyQuetions.setVisibility(View.VISIBLE);
 
         questionIndexator = 0;
     }
@@ -414,7 +422,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
         if (questionIndexator < 0) {
             svMainInfoNewSurvey.setVisibility(View.VISIBLE);
-            svNewSurveyQuetions.setVisibility(View.GONE);
+            llNewSurveyQuetions.setVisibility(View.GONE);
         } else {
             tvQuestionNumber.setText(questionIndexator + 1 + ". Вопрос : ");
 
@@ -453,7 +461,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         newSurvey = new Survey();
 
         svMainInfoNewSurvey.setVisibility(View.VISIBLE);
-        svNewSurveyQuetions.setVisibility(View.GONE);
+        llNewSurveyQuetions.setVisibility(View.GONE);
         llResult.setVisibility(View.GONE);
         btNextQuestion.setText("Следующий вопрос");
 
@@ -531,7 +539,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(CreateNewSurvey.this, "Опрос добавлен на сервер", Toast.LENGTH_SHORT).show();
 
                 svMainInfoNewSurvey.setVisibility(View.GONE);
-                svNewSurveyQuetions.setVisibility(View.GONE);
+                llNewSurveyQuetions.setVisibility(View.GONE);
                 llResult.setVisibility(View.VISIBLE);
 
                 tvResultOfCreate.setText("Опрос добавлен");

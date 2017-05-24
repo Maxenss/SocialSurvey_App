@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -33,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private ProgressDialog pd;
 
+    private Animation animation;
+
     private String userLogin;
     private String userPassword;
 
@@ -48,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setTitle("Вход");
 
+        animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
+
         etLogin = (EditText) findViewById(R.id.etLogin);
         etPassword = (EditText) findViewById(R.id.etPassword);
         btLogin = (Button) findViewById(R.id.btLogin);
@@ -58,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(animation);
                 btLoginClick();
             }
         });
@@ -65,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         btRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(animation);
                 btRegistrationClick();
             }
         });

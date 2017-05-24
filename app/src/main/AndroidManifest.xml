@@ -35,13 +35,6 @@
             android:name=".activity.MenuActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".createQuestionnaire"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".addquestions"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity_with_created_quiz"/>
-        <activity
             android:name=".activity.RegistrationActivity"
             android:screenOrientation="portrait">
         </activity>

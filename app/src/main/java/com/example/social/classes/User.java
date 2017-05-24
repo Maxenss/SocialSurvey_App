@@ -104,7 +104,7 @@ public class User {
             data.put("middleName", middleName);
             data.put("role", role);
             // Чекнуть,если что
-            data.put("passsword", password);
+            data.put("password", password);
         } catch (Exception e) {
             e.printStackTrace();
         }

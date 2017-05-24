@@ -42,10 +42,12 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interwier_survey_list);
+        setTitle("Список опросов");
 
         lvSusrvesyShort = (ListView) findViewById(R.id.lvSusrvesyShort);
 
         mSurveyShortArrayList = new ArrayList<>();
+
 
         try {
             getSurveysListMethod();

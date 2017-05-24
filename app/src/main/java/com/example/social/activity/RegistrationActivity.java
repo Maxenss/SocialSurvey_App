@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -37,6 +39,9 @@ public class RegistrationActivity extends AppCompatActivity {
     LinearLayout llRegistration;
 
     private ProgressDialog pd;
+
+    private Animation animation ;
+
 
     String userLogin;
     String userPassword;
@@ -73,15 +78,19 @@ public class RegistrationActivity extends AppCompatActivity {
 
         llRegistration = (LinearLayout) findViewById(R.id.llRegistration);
 
+        animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
+
         btCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(animation);
                 btCreateAccountClick();
             }
         });
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(animation);
                 btBackClick();
             }
         });

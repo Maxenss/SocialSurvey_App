@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -65,6 +67,8 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
 
     LinearLayout llSurveyInProcess;
     LinearLayout llResOfSurvey;
+
+    private Animation animation;
 
     private PassedSurvey mPassedSurvey;
 
@@ -172,10 +176,13 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
         cbQuestion14.setOnClickListener(this);
         cbQuestion15.setOnClickListener(this);
         cbQuestion16.setOnClickListener(this);
+
+        animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
     }
 
     @Override
     public void onClick(View v) {
+        v.startAnimation(animation);
         try {
             switch (v.getId()) {
                 case R.id.btAnswer:

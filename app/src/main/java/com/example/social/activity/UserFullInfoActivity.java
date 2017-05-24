@@ -5,7 +5,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -13,8 +16,8 @@ import com.example.social.R;
 import com.example.social.classes.Data;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -22,17 +25,21 @@ import static com.example.social.classes.Data.sTempUser;
 
 public class UserFullInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText etUserID;
-    EditText etFirstName;
-    EditText etLastName;
-    EditText etMiddleName;
-    EditText etRole;
-    EditText etPassword;
+    private EditText etUserID;
+    private EditText etFirstName;
+    private EditText etLastName;
+    private EditText etMiddleName;
+    private EditText etRole;
+    private EditText etPassword;
 
-    Button btSaveUserInfo;
-    Button btBack;
+    private Button btSaveUserInfo;
+    private Button btBack;
 
-    ProgressDialog pd;
+    private CheckBox cbIsDeleted;
+
+    private ProgressDialog pd;
+
+    private Animation animation ;
 
     private String requestData;
     private String responseData;
@@ -50,8 +57,13 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         btSaveUserInfo = (Button) findViewById(R.id.btSaveUserInfo);
         btBack = (Button) findViewById(R.id.btBack);
 
+        cbIsDeleted = (CheckBox) findViewById(R.id.cbIsDeleted);
+
         btSaveUserInfo.setOnClickListener(this);
         btBack.setOnClickListener(this);
+        cbIsDeleted.setOnClickListener(this);
+
+        animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
     }
 
     @Override
@@ -75,17 +87,29 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         etMiddleName.setText(sTempUser.getMiddleName());
         etRole.setText(sTempUser.getRole());
         etPassword.setText(sTempUser.getPassword());
+        cbIsDeleted.setChecked(sTempUser.isDeleted());
     }
 
     @Override
     public void onClick(View v) {
+        v.startAnimation(animation);
+
         switch (v.getId()) {
             case R.id.btSaveUserInfo:
                 btSaveUserInfoClick();
-                break;
+                return;
             case R.id.btBack:
                 btBackClick();
-                break;
+                return;
+        }
+
+        try {
+            if (cbIsDeleted.isChecked())
+                deleteUserOnServerMethod();
+            else
+                restoreUserOnServerMethod();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -99,8 +123,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
 
         try {
             setInfoOnServerMethod();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -109,13 +132,14 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         super.onBackPressed();
     }
 
-
     private void createProgressDialog() {
         pd = new ProgressDialog(this);
         pd.setTitle("Загрузка");
         pd.setMessage("Ожидание ответа от сервера");
         pd.show();
     }
+
+
     // --------------------------------------------------------------//
     //          Методы для изменения информации о пользователе
     // --------------------------------------------------------------//
@@ -127,33 +151,30 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         setInfoOnServerTask.execute();
     }
 
-    // HTTP PUY request
-    private String makeRequestPUT(String url) throws Exception {
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        responseData = "";
+    // HTTP PUT request
+    private void makeRequestPUT(String url) throws Exception {
+        URL targetUrl = new URL(url);
+        HttpURLConnection httpCon = (HttpURLConnection) targetUrl.openConnection();
 
-        // Setting basic post request
-        con.setRequestMethod("PUT");
-        con.setRequestProperty("Authorization", "Bearer " + Data.token);
-        con.setRequestProperty("Content-Type", "application/json");
+        httpCon.setDoOutput(true);
+        httpCon.setRequestMethod("PUT");
+        httpCon.setRequestProperty("Authorization", "Bearer " + Data.token);
+        httpCon.setRequestProperty("Content-Type", "application/json");
 
-        // Send post request
-        con.setDoOutput(true);
-        con.setDoInput(true);
+        responseCode = httpCon.getResponseCode();
 
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(requestData);
-        wr.flush();
-        wr.close();
-
-        responseCode = con.getResponseCode();
-        System.out.println("nSending 'POST' request to URL : " + url);
-        System.out.println("Post Data : " + requestData);
+        System.out.println("nSending 'PUT' request to URL : " + url);
         System.out.println("Response Code : " + responseCode);
+        System.out.println("Request Data : " + requestData);
 
+        OutputStreamWriter out = new OutputStreamWriter(
+                httpCon.getOutputStream());
+        out.write(requestData);
+        out.close();
+
+        // Читаем данные
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
+                new InputStreamReader(httpCon.getInputStream()));
         String output;
         StringBuffer response = new StringBuffer();
 
@@ -165,7 +186,6 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         responseData = response.toString();
 
         System.out.println(responseData);
-        return responseData;
     }
 
     private class SetInfoOnServerTask extends AsyncTask<Void, Void, Void> {
@@ -186,7 +206,125 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         protected void onPostExecute(Void res) {
             pd.cancel();
             if (isCorrect) {
-                Toast.makeText(UserFullInfoActivity.this, "Все гуд", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserFullInfoActivity.this, "Операция прошла успешно", Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(UserFullInfoActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
+            }
+
+            isCorrect = false;
+        }
+    }
+
+
+    // --------------------------------------------------------------//
+    //          Методы для удаления пользователя на сервере
+    // --------------------------------------------------------------//
+
+    private void deleteUserOnServerMethod() throws Exception {
+        createProgressDialog();
+        DeleteUserOnServerTask deleteUserOnServerTask = new DeleteUserOnServerTask();
+        deleteUserOnServerTask.execute();
+    }
+
+    // HTTP DELETE request
+    private void makeRequestDelete(String _url) throws Exception {
+        URL url = new URL(_url);
+        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+        httpCon.setDoOutput(true);
+        httpCon.setRequestProperty(
+                "Authorization", "Bearer " + Data.token);
+        httpCon.setRequestProperty(
+                "Content-Type", "application/json");
+        httpCon.setRequestMethod("DELETE");
+        httpCon.connect();
+
+        responseCode = httpCon.getResponseCode();
+        System.out.println("nSending 'DELETE' request to URL : " + _url);
+        System.out.println("Response Code : " + responseCode);
+    }
+
+    private class DeleteUserOnServerTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                makeRequestDelete(Data.URL + "api/user/" + sTempUser.getUserId() + "/soft");
+                isCorrect = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isCorrect = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void res) {
+            pd.cancel();
+            if (isCorrect) {
+                Toast.makeText(UserFullInfoActivity.this, "Операция прошла успешно", Toast.LENGTH_SHORT).show();
+
+                sTempUser.setDeleted(true);
+                cbIsDeleted.setChecked(true);
+
+            } else {
+                Toast.makeText(UserFullInfoActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
+            }
+
+            isCorrect = false;
+        }
+    }
+
+
+    // --------------------------------------------------------------//
+    //         Методы для восстановления пользователя на сервере
+    // --------------------------------------------------------------//
+
+    private void restoreUserOnServerMethod() throws Exception {
+        createProgressDialog();
+        RestoreUserOnServerTask restoreUserOnServerTask = new RestoreUserOnServerTask();
+        restoreUserOnServerTask.execute();
+    }
+
+    // HTTP DELETE request
+    private void makeRequestPATCH(String _url) throws Exception {
+        URL url = new URL(_url);
+        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+        httpCon.setDoOutput(true);
+        httpCon.setRequestProperty(
+                "Authorization", "Bearer " + Data.token);
+        httpCon.setRequestProperty(
+                "Content-Type", "application/json");
+        httpCon.setRequestMethod("PATCH");
+        httpCon.connect();
+
+        responseCode = httpCon.getResponseCode();
+        System.out.println("nSending 'DELETE' request to URL : " + _url);
+        System.out.println("Response Code : " + responseCode);
+    }
+
+    private class RestoreUserOnServerTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                makeRequestPATCH(Data.URL + "api/user/" + sTempUser.getUserId() + "/restore");
+                isCorrect = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isCorrect = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void res) {
+            pd.cancel();
+            if (isCorrect) {
+                Toast.makeText(UserFullInfoActivity.this, "Операция прошла успешно", Toast.LENGTH_SHORT).show();
+
+                sTempUser.setDeleted(false);
+                cbIsDeleted.setChecked(false);
 
             } else {
                 Toast.makeText(UserFullInfoActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();

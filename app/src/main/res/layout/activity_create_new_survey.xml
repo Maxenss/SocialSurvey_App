@@ -3,19 +3,20 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@drawable/grey_texture_backround"
+              android:baselineAligned="false"
               android:paddingBottom="@dimen/activity_vertical_margin"
               android:paddingLeft="@dimen/activity_horizontal_margin"
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin"
-              tools:context="com.example.social.activity.CreateNewSurvey"
-              android:baselineAligned="false">
+              tools:context="com.example.social.activity.CreateNewSurvey">
 
     <ScrollView
         android:id="@+id/svMainInfoNewSurvey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,12 +97,12 @@
         </LinearLayout>
     </ScrollView>
 
-    <ScrollView
-        android:id="@+id/svNewSurveyQuetions"
+    <LinearLayout
+        android:id="@+id/llNewSurveyQuetions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,12 +111,6 @@
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
-
-            <EditText
-                android:id="@+id/etQuestionText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:id="@+id/tvQuestionNumber"
@@ -127,6 +122,13 @@
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/etQuestionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                />
 
             <Switch
                 android:id="@+id/swMultiple"
@@ -155,7 +157,8 @@
                 android:id="@+id/scrollView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:layout_weight="1000">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -564,34 +567,34 @@
                             android:textColor="#000000"/>
                     </LinearLayout>
 
-
-                    <Button
-                        android:id="@+id/btNextQuestion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@drawable/oval_button"
-                        android:text="Следующий вопрос"
-                        android:textColor="#000000"/>
-
-                    <Button
-                        android:id="@+id/btPreviosQuestion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@drawable/oval_button"
-                        android:text="Основное"
-                        android:textColor="#000000"/>
-
                 </LinearLayout>
             </ScrollView>
 
+            <Button
+                android:id="@+id/btNextQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/oval_button"
+                android:text="Следующий вопрос"
+                android:textColor="#000000"/>
+
+            <Button
+                android:id="@+id/btPreviosQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/oval_button"
+                android:text="Основное"
+                android:textColor="#000000"/>
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llResult"

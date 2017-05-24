@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import com.example.social.R;
@@ -16,6 +18,9 @@ public class MenuActivity extends Activity implements View.OnClickListener {
     Button btUsersInfo;
     Button btStatistics;
     Button btStartSurvey;
+
+    private Animation animation;
+
 
 
     @Override
@@ -34,6 +39,8 @@ public class MenuActivity extends Activity implements View.OnClickListener {
         btUsersInfo.setOnClickListener(this);
         btStatistics.setOnClickListener(this);
         btStartSurvey.setOnClickListener(this);
+
+        animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
 
         setVisible();
     }
@@ -80,6 +87,8 @@ public class MenuActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        v.startAnimation(animation);
+
         switch (v.getId()) {
             case R.id.btCreateNewSurvey:
                 btCreateNewSurveyClick();
