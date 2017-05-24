@@ -16,8 +16,8 @@ import com.example.social.R;
 import com.example.social.classes.Data;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -39,7 +39,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
 
     private ProgressDialog pd;
 
-    private Animation animation ;
+    private Animation animation;
 
     private String requestData;
     private String responseData;
@@ -152,25 +152,20 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
     }
 
     // HTTP PUT request
-    private void makeRequestPUT(String url) throws Exception {
-        URL targetUrl = new URL(url);
+    private void makeRequestPUT(String _url) throws Exception {
+        URL targetUrl = new URL(_url);
         HttpURLConnection httpCon = (HttpURLConnection) targetUrl.openConnection();
 
         httpCon.setDoOutput(true);
+        httpCon.setDoInput(true);
         httpCon.setRequestMethod("PUT");
         httpCon.setRequestProperty("Authorization", "Bearer " + Data.token);
         httpCon.setRequestProperty("Content-Type", "application/json");
 
-        responseCode = httpCon.getResponseCode();
-
-        System.out.println("nSending 'PUT' request to URL : " + url);
-        System.out.println("Response Code : " + responseCode);
-        System.out.println("Request Data : " + requestData);
-
-        OutputStreamWriter out = new OutputStreamWriter(
-                httpCon.getOutputStream());
-        out.write(requestData);
-        out.close();
+        // Пишем данные
+        DataOutputStream wr = new DataOutputStream(httpCon.getOutputStream());
+        wr.write(requestData.getBytes("UTF-8"));
+        wr.close();
 
         // Читаем данные
         BufferedReader in = new BufferedReader(
@@ -184,8 +179,12 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         in.close();
 
         responseData = response.toString();
+        responseCode = httpCon.getResponseCode();
 
-        System.out.println(responseData);
+        System.out.println("nSending 'PUT' request to URL : " +  _url);
+        System.out.println("Response Code : " + responseCode);
+        System.out.println("Request Data : " + requestData);
+        System.out.println("Response Data: "+ responseData);
     }
 
     private class SetInfoOnServerTask extends AsyncTask<Void, Void, Void> {
@@ -193,7 +192,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                makeRequestPUT(Data.URL + "api/user/" + sTempUser.getUserId());
+                makeRequestPUT(Data.URL + "api/users/" + sTempUser.getUserId());
                 isCorrect = true;
             } catch (Exception e) {
                 e.printStackTrace();

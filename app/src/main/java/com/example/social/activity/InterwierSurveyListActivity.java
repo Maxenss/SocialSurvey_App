@@ -26,17 +26,29 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InterwierSurveyListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    private String responseData;
-    private int responseCode;
+public class InterwierSurveyListActivity extends AppCompatActivity
+        implements AdapterView.OnItemClickListener {
+    // Список с короткими данными о всех опросах
+    private ListView mLvSusrvesyShort;
 
-    private boolean isCorrect;
+    // Диалог, всплывающий при подключении к серверу
+    private ProgressDialog mProgressDialog;
 
+    // Коллекция с короткими данными о всех опросах
     private ArrayList<SurveyShort> mSurveyShortArrayList;
 
-    private ProgressDialog pd;
+    // Ответ от сервера
+    private String mResponseData;
+    // Код ответа от сервера
+    private int mResponseCode;
+    // Флаг, указывающий на то, как корректно отработал запрос
+    private boolean mIsCorrect;
 
-    ListView lvSusrvesyShort;
+    // Инициализирует View-элементы, и поля
+    private void initializeComponents() {
+        mLvSusrvesyShort = (ListView) findViewById(R.id.lvSusrvesyShort);
+        mSurveyShortArrayList = new ArrayList<>();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,90 +56,16 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
         setContentView(R.layout.activity_interwier_survey_list);
         setTitle("Список опросов");
 
-        lvSusrvesyShort = (ListView) findViewById(R.id.lvSusrvesyShort);
-
-        mSurveyShortArrayList = new ArrayList<>();
-
-
-        try {
-            getSurveysListMethod();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        initializeComponents();
+        getSurveysListMethod();
     }
 
-    private void createProgressDialog(){
-        pd = new ProgressDialog(this);
-        pd.setTitle("Загрузка");
-        pd.setMessage("Ожидание ответа от сервера");
-        pd.show();
-    }
+    // Обработчик нажатия на элемент списка mLvSusrvesyShort
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Data.surveyId = mSurveyShortArrayList.get(position).getSurveyId();
 
-    // --------------------------------------------------------------//
-    //               Методы для получения инфы о опросах
-    // --------------------------------------------------------------//
-
-    private void getSurveysListMethod() throws Exception {
-        createProgressDialog();
-        GetSurveysListTask getSurveysListTask = new GetSurveysListTask();
-        getSurveysListTask.execute();
-    }
-
-    // HTTP GET request
-    private String makeRequestGet(String url) throws Exception {
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        responseData = "";
-
-        // Setting basic post request
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Authorization", "Bearer " + Data.token);
-        con.setRequestProperty("Content-Type", "application/json");
-
-        responseCode = con.getResponseCode();
-        System.out.println("nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " + responseCode);
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String output;
-        StringBuffer response = new StringBuffer();
-
-        while ((output = in.readLine()) != null) {
-            response.append(output);
-        }
-        in.close();
-
-        responseData = response.toString();
-
-        System.out.println(responseData);
-        return responseData;
-    }
-
-    private class GetSurveysListTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                makeRequestGet(Data.URL + "api/surveys");
-                isCorrect = true;
-            } catch (Exception e) {
-                isCorrect = false;
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void res) {
-            pd.cancel();
-            if (isCorrect) {
-                parseJSON();
-                createListView();
-            } else {
-                Toast.makeText(InterwierSurveyListActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
-            }
-        }
+        startActivity(new Intent(this, SurveyFullInfoActivity.class));
     }
 
     // Заполняет коллекцию mSurveyShortArrayList, данными из JSON-документа
@@ -135,7 +73,7 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
         JSONObject dataJsonObj = null;
 
         try {
-            dataJsonObj = new JSONObject(responseData);
+            dataJsonObj = new JSONObject(mResponseData);
             JSONArray surveysArray = dataJsonObj.getJSONArray("response");
 
             for (int i = 0; i < surveysArray.length(); i++) {
@@ -164,6 +102,7 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
         }
     }
 
+    // Создает ListView cо списком опросов
     private void createListView() {
         ArrayList<HashMap<String, String>> mSurveysShortList;
         final String TITLE = "catname"; // Верхний текст
@@ -187,18 +126,92 @@ public class InterwierSurveyListActivity extends AppCompatActivity implements Ad
                 new int[]{android.R.id.text1,
                         android.R.id.text2});
 
-        lvSusrvesyShort.setAdapter(adapter);
+        mLvSusrvesyShort.setAdapter(adapter);
 
-        lvSusrvesyShort.setOnItemClickListener(this);
+        mLvSusrvesyShort.setOnItemClickListener(this);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println(position);
-
-        Data.surveyId = mSurveyShortArrayList.get(position).getSurveyId();
-
-        startActivity(new Intent(this, SurveyFullInfoActivity.class));
+    // Создает ProgressDialog, уведомляющий о загрузке
+    private void createProgressDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Загрузка");
+        mProgressDialog.setMessage("Ожидание ответа от сервера");
+        mProgressDialog.show();
     }
+
+    // --------------------------------------------------------------//
+    //               Методы для получения инфы о опросах
+    // --------------------------------------------------------------//
+
+    // Метод вызывающий цепочку действий для заполнения mLvSusrvesyShort
+    private void getSurveysListMethod() {
+        try {
+            createProgressDialog();
+            GetSurveysListTask getSurveysListTask = new GetSurveysListTask();
+            getSurveysListTask.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // HTTP GET request на получения JSON - списка с опросами
+    private void makeRequestGet(String url) throws Exception {
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        mResponseData = "";
+
+        // Setting basic post request
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Authorization", "Bearer " + Data.token);
+        con.setRequestProperty("Content-Type", "application/json");
+
+        mResponseCode = con.getResponseCode();
+        System.out.println("nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + mResponseCode);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String output;
+        StringBuffer response = new StringBuffer();
+
+        while ((output = in.readLine()) != null) {
+            response.append(output);
+        }
+        in.close();
+
+        mResponseData = response.toString();
+
+        System.out.println(mResponseData);
+    }
+
+    // Асинхронный поток для работы с сетью
+    private class GetSurveysListTask extends AsyncTask<Void, Void, Void> {
+
+        // Пытаемся выполнить запрос
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                makeRequestGet(Data.URL + "api/surveys");
+                mIsCorrect = true;
+            } catch (Exception e) {
+                mIsCorrect = false;
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        // Проверяем результат запроса
+        @Override
+        protected void onPostExecute(Void res) {
+            mProgressDialog.cancel();
+            if (mIsCorrect) {
+                parseJSON();
+                createListView();
+            } else {
+                Toast.makeText(InterwierSurveyListActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 }

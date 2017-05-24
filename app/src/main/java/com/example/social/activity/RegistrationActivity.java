@@ -198,7 +198,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // Send post request
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(postJsonData);
+        wr.write(postJsonData.getBytes());
         wr.flush();
         wr.close();
 

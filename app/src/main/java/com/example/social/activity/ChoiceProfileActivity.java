@@ -19,49 +19,49 @@ import static com.example.social.classes.Data.accessLevelMenu;
 
 public class ChoiceProfileActivity extends Activity implements View.OnClickListener {
 
-    private Button btAdmin;
-    private Button btControl;
-    private Button btInter;
-    private Button btHelp;
-    private Button btSettings;
-    private Button btExit;
+    private Button mBtAdmin;
+    private Button mBtControl;
+    private Button mBtInter;
+    private Button mBtHelp;
+    private Button mBtSettings;
+    private Button mBtExit;
 
-    private Animation animation ;
+    private Animation mAnimation;
 
     private void initializeView() {
-        btAdmin = (Button) findViewById(R.id.btAdmin);
-        btControl = (Button) findViewById(R.id.btControl);
-        btInter = (Button) findViewById(R.id.btInter);
-        btHelp = (Button) findViewById(R.id.btHelp);
-        btSettings = (Button) findViewById(R.id.btSettings);
-        btExit = (Button) findViewById(R.id.btExit);
+        mBtAdmin = (Button) findViewById(R.id.btAdmin);
+        mBtControl = (Button) findViewById(R.id.btControl);
+        mBtInter = (Button) findViewById(R.id.btInter);
+        mBtHelp = (Button) findViewById(R.id.btHelp);
+        mBtSettings = (Button) findViewById(R.id.btSettings);
+        mBtExit = (Button) findViewById(R.id.btExit);
 
-        btAdmin.setOnClickListener(this);
-        btControl.setOnClickListener(this);
-        btInter.setOnClickListener(this);
-        btHelp.setOnClickListener(this);
-        btSettings.setOnClickListener(this);
-        btExit.setOnClickListener(this);
+        mBtAdmin.setOnClickListener(this);
+        mBtControl.setOnClickListener(this);
+        mBtInter.setOnClickListener(this);
+        mBtHelp.setOnClickListener(this);
+        mBtSettings.setOnClickListener(this);
+        mBtExit.setOnClickListener(this);
 
-        animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
+        mAnimation = AnimationUtils.loadAnimation(this, R.anim.butanim);
     }
 
     private void setAccessLevel() {
         switch (Data.accessLevel) {
             case Data.InterviewerRole:
-                btInter.setEnabled(true);
-                btControl.setEnabled(false);
-                btAdmin.setEnabled(false);
+                mBtInter.setEnabled(true);
+                mBtControl.setEnabled(false);
+                mBtAdmin.setEnabled(false);
                 break;
             case Data.ControllerRole:
-                btInter.setEnabled(true);
-                btControl.setEnabled(true);
-                btAdmin.setEnabled(false);
+                mBtInter.setEnabled(true);
+                mBtControl.setEnabled(true);
+                mBtAdmin.setEnabled(false);
                 break;
             case Data.AdminRole:
-                btInter.setEnabled(true);
-                btControl.setEnabled(true);
-                btAdmin.setEnabled(true);
+                mBtInter.setEnabled(true);
+                mBtControl.setEnabled(true);
+                mBtAdmin.setEnabled(true);
                 break;
         }
     }
@@ -78,7 +78,7 @@ public class ChoiceProfileActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        v.startAnimation(animation);
+        v.startAnimation(mAnimation);
 
         switch (v.getId()) {
             case R.id.btAdmin:
