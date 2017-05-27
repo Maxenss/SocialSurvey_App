@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InterwierSurveyListActivity extends AppCompatActivity
+public class SurveyListActivity extends AppCompatActivity
         implements AdapterView.OnItemClickListener {
     // Список с короткими данными о всех опросах
     private ListView mLvSusrvesyShort;
@@ -65,7 +65,12 @@ public class InterwierSurveyListActivity extends AppCompatActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Data.surveyId = mSurveyShortArrayList.get(position).getSurveyId();
 
-        startActivity(new Intent(this, SurveyFullInfoActivity.class));
+        if(Data.accesLevelSurveys == Data.CONTROLLERLIST) {
+            startActivity(new Intent(this, StatisticsActivity.class));
+        }
+        else {
+            startActivity(new Intent(this, SurveyFullInfoActivity.class));
+        }
     }
 
     // Заполняет коллекцию mSurveyShortArrayList, данными из JSON-документа
@@ -208,7 +213,7 @@ public class InterwierSurveyListActivity extends AppCompatActivity
                 parseJSON();
                 createListView();
             } else {
-                Toast.makeText(InterwierSurveyListActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SurveyListActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -15,6 +15,8 @@ public class Option {
     // Удален ли ответ
     private boolean mIsDeleted;
 
+    private int answersCount;
+
     public Option(int optionId, String text, int order, boolean isDeleted) {
         mOptionId = optionId;
         mText = text;
@@ -59,5 +61,13 @@ public class Option {
 
     public void setDeleted(boolean deleted) {
         mIsDeleted = deleted;
+    }
+
+    public int getAnswersCount() {
+        return answersCount;
+    }
+
+    public void setAnswersCount(int answersCount) {
+        this.answersCount = answersCount;
     }
 }

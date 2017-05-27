@@ -22,7 +22,6 @@ public class MenuActivity extends Activity implements View.OnClickListener {
     private Animation animation;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,10 +120,14 @@ public class MenuActivity extends Activity implements View.OnClickListener {
     }
 
     private void btStatisticsClick() {
+        Data.accesLevelSurveys = Data.CONTROLLERLIST;
 
+        startActivity(new Intent(this, SurveyListActivity.class));
     }
 
     private void btStartSurveyClick() {
-        startActivity(new Intent(this, InterwierSurveyListActivity.class));
+        Data.accesLevelSurveys = Data.INTERVIEWERLIST;
+
+        startActivity(new Intent(this, SurveyListActivity.class));
     }
 }

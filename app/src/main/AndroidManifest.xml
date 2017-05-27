@@ -39,7 +39,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.InterwierSurveyListActivity"
+            android:name=".activity.SurveyListActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -57,11 +57,12 @@
         <activity
             android:name=".activity.SurveyActivity"
             android:screenOrientation="portrait">
-
         </activity>
         <activity
             android:name=".activity.UserFullInfoActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.StatisticsActivity">
         </activity>
     </application>
 

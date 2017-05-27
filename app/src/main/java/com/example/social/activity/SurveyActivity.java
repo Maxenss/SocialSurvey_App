@@ -316,7 +316,7 @@ public class SurveyActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void btToMenuClick() {
-        startActivity(new Intent(this, InterwierSurveyListActivity.class));
+        startActivity(new Intent(this, SurveyListActivity.class));
     }
 
     private void createExitDialog() {

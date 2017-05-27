@@ -15,6 +15,10 @@ public class Data {
     public static final int ControllerRole = 1;
     public static final int AdminRole = 2;
 
+    public static final int CONTROLLERLIST = 10;
+    public static final int INTERVIEWERLIST = 10;
+    public static  int accesLevelSurveys;
+
     public static String token;
     public static int userId;
     public static String login;

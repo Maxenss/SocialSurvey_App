@@ -24,6 +24,8 @@ public class Survey {
     // Коллекция с вопросами для опроса
     private ArrayList<Question> mArrayListQuestions;
 
+    private int interviewees;
+
     public Survey(int surveyId, String name, boolean isDeleted, int userId, ArrayList<Question> arrayListQuestions) {
         mSurveyId = surveyId;
         mName = name;
@@ -82,6 +84,14 @@ public class Survey {
 
     public void setComment(String comment) {
         mComment = comment;
+    }
+
+    public int getInterviewees() {
+        return interviewees;
+    }
+
+    public void setInterviewees(int interviewees) {
+        this.interviewees = interviewees;
     }
 
     public static Survey getSurveyFromJSON(String jsonString) {
@@ -146,9 +156,63 @@ public class Survey {
         return tempSurvey;
     }
 
-    // Метод, для генерация JSON-строки при создании нового опроса
-    public String getJSONFromSurvey() {
-        return null;
+    public static Survey getStatisticSurveyFromJson(String jsonString) {
+        // Полный опрос
+        JSONObject surveyJsonObj;
+        // Массив вопросов
+        JSONArray questionsJsonArray;
+        // Массив ответов
+        JSONArray optionsJsonArray;
+
+        JSONObject JSONQuestion;
+        JSONObject JSONOption;
+        Question question;
+        Option option;
+
+        Survey tempSurvey = new Survey();
+
+        try {
+            // JSON объект - полный опрос
+            surveyJsonObj = new JSONObject(jsonString).getJSONObject("response");
+            // JSON массив - вопросы
+            questionsJsonArray = surveyJsonObj.getJSONArray("questions");
+
+            // Получаем базовую информацию о опросе
+            tempSurvey.setName(surveyJsonObj.getString("name"));
+            //tempSurvey.setSurveyId(surveyJsonObj.getInt("surveyId"));
+            tempSurvey.setInterviewees(surveyJsonObj.getInt("interviewees"));
+
+
+            for (int i = 0; i < questionsJsonArray.length(); i++) {
+                JSONQuestion = questionsJsonArray.getJSONObject(i);
+
+                question = new Question();
+                question.setQuestionId(JSONQuestion.getInt("questionId"));
+                question.setQuestionType(JSONQuestion.getString("questionType"));
+                question.setText(JSONQuestion.getString("text"));
+                question.setOrder(JSONQuestion.getInt("order"));
+
+                optionsJsonArray = JSONQuestion.getJSONArray("options");
+
+                for (int j = 0; j < optionsJsonArray.length(); j++) {
+                    JSONOption = optionsJsonArray.getJSONObject(j);
+
+                    option = new Option();
+                    option.setOptionId(JSONOption.getInt("optionId"));
+                    option.setText(JSONOption.getString("text"));
+                    option.setOrder(JSONOption.getInt("order"));
+                    option.setAnswersCount(JSONOption.getInt("answersCount"));
+
+                    question.getArrayListOptions().add(option);
+                }
+                tempSurvey.getArrayListQuestions().add(question);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return tempSurvey;
     }
 
     public String getNewSurveyOnServerJSON() throws JSONException {
@@ -170,14 +234,14 @@ public class Survey {
                 questionJSON.put("text", this.getArrayListQuestions().get(i).getText());
                 //Что-то, возможно, костыльное
                 questionJSON.put("order", i + 1);
-               // questionJSON.put("isDeleted", this.getArrayListQuestions().get(i).isDeleted());
+                // questionJSON.put("isDeleted", this.getArrayListQuestions().get(i).isDeleted());
 
                 for (int j = 0; j < this.getArrayListQuestions().get(i).getArrayListOptions().size(); j++) {
                     optionJSON = new JSONObject();
 
                     optionJSON.put("text", this.getArrayListQuestions().get(i).getArrayListOptions().get(j).getText());
                     //Что-то, возможно, костыльное
-                    optionJSON.put("order", j+1);
+                    optionJSON.put("order", j + 1);
 
                     optionsJSON.put(optionJSON);
                 }
