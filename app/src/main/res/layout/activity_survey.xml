@@ -291,7 +291,8 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/oval_button"
-                android:text="Завершить опрос"/>
+                android:text="Завершить опрос"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

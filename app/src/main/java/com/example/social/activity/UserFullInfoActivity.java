@@ -26,6 +26,7 @@ import static com.example.social.classes.Data.sTempUser;
 public class UserFullInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText etUserID;
+    private EditText etLogin;
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etMiddleName;
@@ -53,6 +54,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         etMiddleName = (EditText) findViewById(R.id.etMiddleName);
         etRole = (EditText) findViewById(R.id.etRole);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        etLogin = (EditText) findViewById(R.id.etLogin);
 
         btSaveUserInfo = (Button) findViewById(R.id.btSaveUserInfo);
         btBack = (Button) findViewById(R.id.btBack);
@@ -82,6 +84,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
 
     private void showUser() {
         etUserID.setText(sTempUser.getUserId() + "");
+        etLogin.setText(sTempUser.getLogin());
         etFirstName.setText(sTempUser.getFirstName());
         etLastName.setText(sTempUser.getLastName());
         etMiddleName.setText(sTempUser.getMiddleName());
@@ -115,6 +118,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
 
     private void btSaveUserInfoClick() {
         sTempUser.setUserId(Integer.parseInt(etUserID.getText().toString()));
+        //sTempUser.setLogin(etLogin.getText().toString());
         sTempUser.setFirstName(etFirstName.getText().toString());
         sTempUser.setLastName(etLastName.getText().toString());
         sTempUser.setMiddleName(etMiddleName.getText().toString());

@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,26 +25,26 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class StatisticsActivity extends AppCompatActivity {
-
     private String responseData;
     private int responseCode;
 
     private boolean isCorrect;
 
-    private ArrayList<LinearLayout> LinearLayoutWithQuestionsArrayList;
-
     private LinearLayout llQuestions;
     private TextView tvNameOfSurvey;
     private TextView tvCountOfQuetions;
     private TextView tvInterviewees;
-    //private Button btStartSurvey;
 
     private ProgressDialog pd;
 
-    private Animation animation;
+    private void initializeView() {
+        llQuestions = (LinearLayout) findViewById(R.id.llQuestions);
+        tvNameOfSurvey = (TextView) findViewById(R.id.tvNameOfSurvey);
+        tvCountOfQuetions = (TextView) findViewById(R.id.tvCountOfQuetions);
+        tvInterviewees = (TextView) findViewById(R.id.tvInterviewees);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +52,9 @@ public class StatisticsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_statistics);
         setTitle("Просмотр статистики");
 
-        llQuestions = (LinearLayout) findViewById(R.id.llQuestions);
-        tvNameOfSurvey = (TextView) findViewById(R.id.tvNameOfSurvey);
-        tvCountOfQuetions = (TextView) findViewById(R.id.tvCountOfQuetions);
-        tvInterviewees = (TextView) findViewById(R.id.tvInterviewees);
+        initializeView();
 
-        try {
-            getSurveyStatisticMethod();
-        } catch (Exception e) {
-
-        }
+        getSurveyStatisticMethod();
     }
 
     private void createProgressDialog() {
@@ -82,6 +74,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
             for (int i = 0; i < Data.targetSurvey.getArrayListQuestions().size(); i++)
                 createNewLinearLayoutWithQuestion(i);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,8 +119,7 @@ public class StatisticsActivity extends AppCompatActivity {
         if (Data.targetSurvey.getArrayListQuestions().get(index).getQuestionType().equals("Select")) {
             checkBoxMultiple.setText("Одиночный выбор");
             checkBoxMultiple.setChecked(true);
-        }
-        else {
+        } else {
             checkBoxMultiple.setText("Множественный выбор");
             checkBoxMultiple.setChecked(true);
         }
@@ -183,10 +175,14 @@ public class StatisticsActivity extends AppCompatActivity {
     //               Методы для получения инфы о опросе
     // --------------------------------------------------------------//
 
-    private void getSurveyStatisticMethod() throws Exception {
-        createProgressDialog();
-        GetSurveyStatisticTask getStatisticSurveyTask = new GetSurveyStatisticTask();
-        getStatisticSurveyTask.execute();
+    private void getSurveyStatisticMethod(){
+        try {
+            createProgressDialog();
+            GetSurveyStatisticTask getStatisticSurveyTask = new GetSurveyStatisticTask();
+            getStatisticSurveyTask.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // HTTP Post request

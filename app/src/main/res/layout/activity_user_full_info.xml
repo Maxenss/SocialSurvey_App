@@ -48,6 +48,29 @@
                 android:layout_margin="5dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
+                android:text="login : "
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/etLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="center"
+                android:inputType="textPersonName"/>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
                 android:text="firstName:"
                 android:textColor="#000000"
                 android:textSize="16sp"

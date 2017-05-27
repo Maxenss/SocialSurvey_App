@@ -35,7 +35,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
     EditText etCountOfQuestions;
 
     ScrollView svMainInfoNewSurvey;
-    LinearLayout llNewSurveyQuetions;
+    ScrollView svNewSurveyQuetions;
 
     LinearLayout llResult;
 
@@ -106,7 +106,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         btContinueCreateSurvey = (Button) findViewById(R.id.btContinueCreateSurvey);
 
         svMainInfoNewSurvey = (ScrollView) findViewById(R.id.svMainInfoNewSurvey);
-        llNewSurveyQuetions = (LinearLayout) findViewById(R.id.llNewSurveyQuetions);
+        svNewSurveyQuetions = (ScrollView) findViewById(R.id.svNewSurveyQuetions);
 
         swMultiple = (Switch) findViewById(R.id.swMultiple);
 
@@ -188,6 +188,9 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
         swMultiple.setChecked(false);
 
+        tvQuestionNumber.setText(1 + ". Вопрос : ");
+
+        svNewSurveyQuetions.scrollTo(0,0);
     }
 
     @Override
@@ -321,7 +324,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         newSurvey.setArrayListQuestions(new ArrayList<Question>(countOfQuestions));
 
         svMainInfoNewSurvey.setVisibility(View.GONE);
-        llNewSurveyQuetions.setVisibility(View.VISIBLE);
+        svNewSurveyQuetions.setVisibility(View.VISIBLE);
 
         questionIndexator = 0;
     }
@@ -422,7 +425,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
 
         if (questionIndexator < 0) {
             svMainInfoNewSurvey.setVisibility(View.VISIBLE);
-            llNewSurveyQuetions.setVisibility(View.GONE);
+            svNewSurveyQuetions.setVisibility(View.GONE);
         } else {
             tvQuestionNumber.setText(questionIndexator + 1 + ". Вопрос : ");
 
@@ -461,7 +464,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
         newSurvey = new Survey();
 
         svMainInfoNewSurvey.setVisibility(View.VISIBLE);
-        llNewSurveyQuetions.setVisibility(View.GONE);
+        svNewSurveyQuetions.setVisibility(View.GONE);
         llResult.setVisibility(View.GONE);
         btNextQuestion.setText("Следующий вопрос");
 
@@ -539,7 +542,7 @@ public class CreateNewSurvey extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(CreateNewSurvey.this, "Опрос добавлен на сервер", Toast.LENGTH_SHORT).show();
 
                 svMainInfoNewSurvey.setVisibility(View.GONE);
-                llNewSurveyQuetions.setVisibility(View.GONE);
+                svNewSurveyQuetions.setVisibility(View.GONE);
                 llResult.setVisibility(View.VISIBLE);
 
                 tvResultOfCreate.setText("Опрос добавлен");

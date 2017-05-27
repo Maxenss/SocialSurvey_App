@@ -26,6 +26,7 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etLogin;
@@ -47,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
     private int responseCode;
 
     private boolean signInFlag = false;
+    private boolean isConnected = false;
+
+    SignInTask pt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,14 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (pd != null && pd.isShowing()){
+            if (pt != null) {
+                pt.cancel(false);
+                Toast.makeText(this, "Подключение к серверу отменено", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         createExitDialog();
     }
 
@@ -122,11 +134,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         try {
-            createProgressDialog();
             signInMethod();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -146,10 +157,11 @@ public class LoginActivity extends AppCompatActivity {
     // --------------------------------------------------------------//
 
     private void signInMethod() throws Exception {
-        llSignIn.setEnabled(false);
+        createProgressDialog();
+
         requestData = "login=" + userLogin + "&password=" + userPassword;
 
-        SignInTask pt = new SignInTask();
+        pt = new SignInTask();
         pt.execute();
     }
 
@@ -200,16 +212,22 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 makeRequestPost(Data.URL + "token", requestData);
                 signInFlag = true;
-            } catch (Exception e) {
+                isConnected = true;
+            } catch (UnknownHostException e) {
                 e.printStackTrace();
                 signInFlag = false;
+                isConnected = false;
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                signInFlag = false;
+                isConnected = true;
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void res) {
-            pd.cancel();
             if (signInFlag) {
                 Toast.makeText(LoginActivity.this, "Вы залогинены", Toast.LENGTH_SHORT).show();
 
@@ -225,8 +243,14 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-            } else
-                Toast.makeText(LoginActivity.this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
+            } else {
+                pd.cancel();
+
+                if(isConnected)
+                    Toast.makeText(LoginActivity.this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(LoginActivity.this, "Нет подключения к сети", Toast.LENGTH_SHORT).show();
+            }
 
             signInFlag = false;
         }
@@ -286,10 +310,9 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void res) {
-            llSignIn.setEnabled(true);
-
+            pd.cancel();
             // Получаем токен пользователя
-            JSONObject dataJsonObj = null;
+            JSONObject dataJsonObj;
 
             try {
                 dataJsonObj = new JSONObject(responseData).getJSONObject("response");

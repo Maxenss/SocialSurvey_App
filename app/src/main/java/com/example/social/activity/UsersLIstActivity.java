@@ -39,11 +39,13 @@ public class UsersLIstActivity extends AppCompatActivity implements AdapterView.
 
         lvUsersList = (ListView) findViewById(R.id.lvUsersList);
 
-        try {
-            getUsersTaskMethod();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        getUsersTaskMethod();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getUsersTaskMethod();
     }
 
     private void parseJSON() {
@@ -123,9 +125,14 @@ public class UsersLIstActivity extends AppCompatActivity implements AdapterView.
     //           Методы для получения данных о пользователях
     // --------------------------------------------------------------//
 
-    private void getUsersTaskMethod() throws Exception {
-        GetUsersTask gut = new GetUsersTask();
-        gut.execute();
+    private void getUsersTaskMethod() {
+        try {
+            GetUsersTask gut = new GetUsersTask();
+            gut.execute();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     // HTTP GET request

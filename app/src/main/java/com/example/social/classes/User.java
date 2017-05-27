@@ -99,6 +99,7 @@ public class User {
 
         try {
             data.put("userId", userId);
+            //data.put("login", login);
             data.put("firstName", firstName);
             data.put("lastName", lastName);
             data.put("middleName", middleName);
