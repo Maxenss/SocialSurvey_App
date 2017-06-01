@@ -16,7 +16,7 @@ public class Data {
     public static final int AdminRole = 2;
 
     public static final int CONTROLLERLIST = 10;
-    public static final int INTERVIEWERLIST = 10;
+    public static final int INTERVIEWERLIST = 11;
     public static  int accesLevelSurveys;
 
     public static String token;

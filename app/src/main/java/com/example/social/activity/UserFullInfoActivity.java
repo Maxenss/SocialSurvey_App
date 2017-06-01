@@ -7,9 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.social.R;
@@ -32,6 +35,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
     private EditText etMiddleName;
     private EditText etRole;
     private EditText etPassword;
+    private Spinner spRole;
 
     private Button btSaveUserInfo;
     private Button btBack;
@@ -47,6 +51,8 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
     private int responseCode;
     private boolean isCorrect = false;
 
+    String[] data = {"Admin", "Controller", "Interviewer"};
+
     private void initializeViews() {
         etUserID = (EditText) findViewById(R.id.etUserID);
         etFirstName = (EditText) findViewById(R.id.etFirstName);
@@ -55,6 +61,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         etRole = (EditText) findViewById(R.id.etRole);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etLogin = (EditText) findViewById(R.id.etLogin);
+
 
         btSaveUserInfo = (Button) findViewById(R.id.btSaveUserInfo);
         btBack = (Button) findViewById(R.id.btBack);
@@ -68,6 +75,41 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         animation = AnimationUtils.loadAnimation(this, R.anim.butanim);
     }
 
+    private void initializeSpinner() {
+        // адаптер
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spRole = (Spinner) findViewById(R.id.spRole);
+        spRole.setAdapter(adapter);
+        // заголовок
+        spRole.setPrompt("Выберите роль");
+        // выделяем элемент
+        switch (sTempUser.getRole()) {
+            case "Admin":
+                spRole.setSelection(0);
+                break;
+            case "Controller":
+                spRole.setSelection(1);
+                break;
+            case "Interviewer":
+                spRole.setSelection(2);
+                break;
+        }
+        // устанавливаем обработчик нажатия
+        spRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +117,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         try {
             setTitle("Информация о пользователе");
             initializeViews();
-
+            initializeSpinner();
             showUser();
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,7 +130,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         etFirstName.setText(sTempUser.getFirstName());
         etLastName.setText(sTempUser.getLastName());
         etMiddleName.setText(sTempUser.getMiddleName());
-        etRole.setText(sTempUser.getRole());
+        //etRole.setText(sTempUser.getRole());
         etPassword.setText(sTempUser.getPassword());
         cbIsDeleted.setChecked(sTempUser.isDeleted());
     }
@@ -122,7 +164,7 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         sTempUser.setFirstName(etFirstName.getText().toString());
         sTempUser.setLastName(etLastName.getText().toString());
         sTempUser.setMiddleName(etMiddleName.getText().toString());
-        sTempUser.setRole(etRole.getText().toString());
+        sTempUser.setRole(spRole.getSelectedItem().toString());
         sTempUser.setPassword(etPassword.getText().toString());
 
         try {
@@ -185,10 +227,10 @@ public class UserFullInfoActivity extends AppCompatActivity implements View.OnCl
         responseData = response.toString();
         responseCode = httpCon.getResponseCode();
 
-        System.out.println("nSending 'PUT' request to URL : " +  _url);
+        System.out.println("nSending 'PUT' request to URL : " + _url);
         System.out.println("Response Code : " + responseCode);
         System.out.println("Request Data : " + requestData);
-        System.out.println("Response Data: "+ responseData);
+        System.out.println("Response Data: " + responseData);
     }
 
     private class SetInfoOnServerTask extends AsyncTask<Void, Void, Void> {

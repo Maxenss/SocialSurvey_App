@@ -67,7 +67,7 @@ public class MenuActivity extends Activity implements View.OnClickListener {
             case Data.AdminRole: {
                 setTitle("Администратор");
                 btCreateNewSurvey.setVisibility(View.VISIBLE);
-                btViewSurvey.setVisibility(View.VISIBLE);
+                //btViewSurvey.setVisibility(View.VISIBLE);
                 btUsersInfo.setVisibility(View.VISIBLE);
                 btStatistics.setVisibility(View.GONE);
                 btStartSurvey.setVisibility(View.GONE);

@@ -70,7 +70,7 @@ public class StatisticsActivity extends AppCompatActivity {
             tvNameOfSurvey.setText(Data.targetSurvey.getName());
             tvCountOfQuetions.setText("Количество вопросов : " +
                     Data.targetSurvey.getArrayListQuestions().size());
-            tvInterviewees.setText("Опрошено граждан :" + Data.targetSurvey.getInterviewees());
+            tvInterviewees.setText("Опрошено граждан : " + Data.targetSurvey.getInterviewees());
 
             for (int i = 0; i < Data.targetSurvey.getArrayListQuestions().size(); i++)
                 createNewLinearLayoutWithQuestion(i);
